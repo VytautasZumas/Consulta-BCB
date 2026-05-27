@@ -1,42 +1,1365 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Consulta Integrada CNPJ e Banco Central</title>
-<link rel="icon" type="image/png" href="icone.png">
-<link rel="shortcut icon" type="image/png" href="icone.png">
-<style>
-:root{--bg:#020617;--soft:rgba(255,255,255,.05);--border:rgba(255,255,255,.12);--text:#f8fafc;--muted:#94a3b8;--muted2:#64748b;--cyan:#67e8f9;--green:#86efac;--red:#fecaca;--redbg:rgba(127,29,29,.46);--shadow:0 24px 80px rgba(0,0,0,.42);--r1:28px;--r2:18px;--r3:14px}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(circle at top left,rgba(34,211,238,.15),transparent 34rem),radial-gradient(circle at top right,rgba(59,130,246,.12),transparent 32rem),var(--bg);font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif}button,input,select{font:inherit}button{border:0;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.62}.page{width:min(1220px,calc(100% - 32px));margin:0 auto;padding:34px 0 64px}.hero,.section,.search,.card,.summary,.res{border:1px solid var(--border);border-radius:var(--r1);background:var(--soft);box-shadow:var(--shadow)}.hero{overflow:hidden;margin-bottom:22px;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025))}.heroin{display:grid;grid-template-columns:1.08fr .92fr;gap:30px;align-items:center;padding:38px}.brand{display:flex;align-items:center;gap:18px;margin-bottom:18px}.brand img{width:76px;height:76px;object-fit:contain;flex:0 0 auto;border-radius:20px;padding:8px;background:rgba(255,255,255,.055);border:1px solid rgba(103,232,249,.22);box-shadow:0 14px 40px rgba(0,0,0,.35)}.brand-text{min-width:0}.brand-unit{margin-top:6px;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.eyebrow{display:inline-flex;border:1px solid rgba(103,232,249,.34);background:rgba(103,232,249,.1);color:#cffafe;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}h1{margin:0;font-size:clamp(31px,5vw,54px);line-height:1.02;letter-spacing:-.045em}.hero p,.sub{color:var(--muted);line-height:1.65}.hero p{font-size:16px;margin:18px 0 0}.panel{border:1px solid var(--border);border-radius:var(--r1);background:rgba(15,23,42,.88);padding:22px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{border-radius:999px;background:rgba(255,255,255,.055);color:var(--muted);padding:6px 10px;font-size:12px;font-weight:800}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}.tab{min-height:56px;border-radius:20px;border:1px solid var(--border);background:var(--soft);color:#cbd5e1;font-weight:950}.tab.active{background:var(--cyan);color:#06202a}.tool{display:none}.tool.active{display:block}.search,.section{padding:24px;margin-bottom:22px}label{display:block;color:#e2e8f0;font-size:14px;font-weight:800;margin-bottom:8px}.row{display:flex;gap:12px}.grid{display:grid;gap:12px}.input,.select{min-height:52px;width:100%;border-radius:18px;border:1px solid var(--border);background:#020617;color:var(--text);outline:none;padding:0 16px;font-size:16px;font-weight:750}.input:focus,.select:focus{border-color:var(--cyan);box-shadow:0 0 0 5px rgba(103,232,249,.11)}.btn{min-height:52px;border-radius:18px;background:var(--cyan);color:#06202a;padding:0 24px;font-weight:950;white-space:nowrap}.btn2,.btn3{min-height:42px;border-radius:16px;padding:0 15px;border:1px solid var(--border);background:rgba(15,23,42,.92);color:var(--text);font-size:14px;font-weight:900}.btn3{border-color:rgba(103,232,249,.32);background:rgba(103,232,249,.1);color:#cffafe}.error{display:none;border:1px solid rgba(248,113,113,.36);background:var(--redbg);border-radius:var(--r1);padding:18px;color:var(--red);margin-bottom:22px;line-height:1.55;font-weight:750}.error.show{display:block}.loading{display:none;border:1px solid rgba(103,232,249,.28);border-radius:var(--r1);background:rgba(103,232,249,.08);color:#cffafe;padding:18px;margin-bottom:22px;font-weight:850}.loading.show{display:block}.stats,.summarygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}.card,.summary{padding:18px}.lbl{color:var(--muted2);font-size:12px;font-weight:950;letter-spacing:.14em;text-transform:uppercase}.val{margin-top:10px;font-size:20px;font-weight:950;color:#fff;overflow-wrap:anywhere}.badge{display:inline-flex;border-radius:999px;background:rgba(134,239,172,.1);color:var(--green);padding:7px 11px;font-size:12px;font-weight:950}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.actions{display:flex;flex-wrap:wrap;gap:10px}h2,h3{margin:0;letter-spacing:-.02em}h2{font-size:25px}h3{font-size:18px}.infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.info{border:1px solid var(--border);border-radius:var(--r2);background:rgba(2,6,23,.46);padding:14px;min-width:0}.info.wide{grid-column:span 2}.infoval{margin-top:8px;color:#f1f5f9;font-size:14px;line-height:1.55;font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed var(--border);border-radius:var(--r1);background:rgba(255,255,255,.025);color:var(--muted);padding:34px;text-align:center}.list{display:grid;gap:16px}.res{padding:20px}.restop{display:flex;justify-content:space-between;gap:16px;margin-bottom:16px}.title{font-size:20px;font-weight:950;overflow-wrap:anywhere}.raw{display:none}.raw.show{display:block}pre{max-height:540px;overflow:auto;border:1px solid var(--border);border-radius:var(--r2);background:#000;color:#cffafe;padding:18px;font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.tree{display:grid;gap:12px}.node,.arr{border:1px solid var(--border);border-radius:var(--r2);background:rgba(2,6,23,.42);padding:14px}.treerow{display:grid;grid-template-columns:260px 1fr;gap:14px}.key{color:#cbd5e1;font-size:14px;font-weight:900;overflow-wrap:anywhere}.tval{color:#f8fafc;font-size:14px;line-height:1.65;overflow-wrap:anywhere}summary{cursor:pointer;user-select:none;color:#f8fafc;font-weight:900;list-style:none}summary::-webkit-details-marker{display:none}summary:before{content:"+";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-right:9px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--cyan);font-weight:950}details[open]>summary:before{content:"−"}.meta{margin-left:8px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--muted);padding:3px 8px;font-size:12px}.nested{margin-top:14px;border-left:1px solid var(--border);padding-left:14px}.muted{color:var(--muted2)}table{width:100%;min-width:700px;border-collapse:collapse;font-size:14px}th{background:rgba(15,23,42,.95);padding:13px 15px;text-align:left}td{background:rgba(2,6,23,.42);border-top:1px solid var(--border);padding:13px 15px}.tablewrap{overflow:auto;border:1px solid var(--border);border-radius:var(--r2);margin-top:14px}@media(max-width:960px){.heroin{grid-template-columns:1fr;padding:26px}.stats,.summarygrid,.infogrid{grid-template-columns:1fr 1fr}.info.wide{grid-column:span 2}}@media(max-width:640px){.page{width:min(100% - 22px,1220px);padding-top:18px}.heroin,.section,.search{padding:18px}.tabs,.stats,.summarygrid,.infogrid,.treerow{grid-template-columns:1fr}.row,.head,.restop{flex-direction:column}.btn,.btn2,.btn3{width:100%}.info.wide{grid-column:span 1}h1{font-size:34px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta Integrada CNPJ e BCB - LAB-LD PCGO</title>
+  <link rel="icon" type="image/png" href="icone.png">
+  <link rel="shortcut icon" type="image/png" href="icone.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-gradient: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.12), transparent 50%), 
+                     radial-gradient(circle at 0% 100%, rgba(99, 102, 241, 0.06), transparent 45%), 
+                     #030712;
+      --card-bg: rgba(17, 24, 39, 0.55);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-focus: rgba(34, 211, 238, 0.4);
+      --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --cyan-accent: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.15);
+      --green-accent: #34d399;
+      --green-glow: rgba(52, 211, 153, 0.12);
+      --red-accent: #f87171;
+      --red-glow: rgba(248, 113, 113, 0.12);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    main {
+      width: min(1140px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    /* --- BRAND & HERO --- */
+    .hero-header {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 24px;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.03);
+      border: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-meta {
+      min-width: 0;
+    }
+
+    .badge-eyebrow {
+      display: inline-flex;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      color: var(--cyan-accent);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: clamp(24px, 4vw, 38px);
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff, #a5f3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 8px;
+      max-width: 600px;
+    }
+
+    .status-panel {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      min-width: 240px;
+    }
+
+    .status-title {
+      font-family: var(--font-title);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .status-dot.active {
+      background: var(--green-accent);
+      box-shadow: 0 0 10px var(--green-accent);
+    }
+
+    .status-dot.loading {
+      background: var(--cyan-accent);
+      box-shadow: 0 0 10px var(--cyan-accent);
+      animation: pulse 1.5s infinite;
+    }
+
+    /* --- SEARCH BAR --- */
+    .search-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .search-label {
+      display: block;
+      font-family: var(--font-title);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 54px;
+      background: rgba(3, 7, 18, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 0 20px;
+      font-size: 16px;
+      font-weight: 600;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan-accent);
+      box-shadow: 0 0 0 4px var(--cyan-glow);
+    }
+
+    .search-btn {
+      height: 54px;
+      padding: 0 30px;
+      background: var(--cyan-accent);
+      color: #083344;
+      border: 0;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .search-btn:hover:not(:disabled) {
+      filter: brightness(1.1);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+    }
+
+    .search-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* --- FEEDBACK STATES --- */
+    .error-box {
+      display: none;
+      background: var(--red-glow);
+      border: 1px solid rgba(248, 113, 113, 0.25);
+      color: var(--red-accent);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .error-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .loading-box {
+      display: none;
+      background: var(--cyan-glow);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      color: var(--cyan-accent);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .loading-box.show {
+      display: block;
+    }
+
+    .empty-state {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 60px 40px;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* --- RESULT PANELS --- */
+    .result-view {
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* Summary Grid */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .summary-card.featured {
+      border-color: rgba(34, 211, 238, 0.3);
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.55), rgba(6, 182, 212, 0.05));
+    }
+
+    .card-label {
+      font-family: var(--font-title);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .card-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      background: var(--green-glow);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--green-accent);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    /* Split Details Grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+      min-width: 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 16px;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      height: 38px;
+      padding: 0 16px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-accent {
+      height: 38px;
+      padding: 0 16px;
+      background: var(--cyan-glow);
+      color: var(--cyan-accent);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-accent:hover {
+      background: rgba(34, 211, 238, 0.2);
+    }
+
+    /* Fields Grid */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .field-box {
+      background: rgba(3, 7, 18, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .field-box.wide {
+      grid-column: span 2;
+    }
+
+    .field-box.full {
+      grid-column: span 3;
+    }
+
+    .field-label {
+      font-family: var(--font-title);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .field-value {
+      font-size: 14px;
+      color: #e5e7eb;
+      margin-top: 6px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    /* BCB Card Specifics */
+    .bcb-card {
+      border-color: rgba(52, 211, 153, 0.2);
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.55), rgba(52, 211, 153, 0.02));
+    }
+
+    .bcb-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green-glow);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--green-accent);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .bcb-warning-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .bcb-warning-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    /* --- DATA TABLE --- */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: rgba(3, 7, 18, 0.3);
+      margin-top: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 12px 16px;
+      color: #d1d5db;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    /* --- TREE VIEW --- */
+    .tree-box {
+      margin-top: 12px;
+    }
+
+    .tree {
+      display: grid;
+      gap: 8px;
+    }
+
+    .node, .arr {
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: rgba(3, 7, 18, 0.25);
+      padding: 12px 16px;
+    }
+
+    .treerow {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .key {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .tval {
+      color: #ffffff;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    summary {
+      cursor: pointer;
+      user-select: none;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      list-style: none;
+      outline: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: "＋";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--cyan-accent);
+      font-size: 11px;
+      font-weight: 800;
+      transition: var(--transition);
+    }
+
+    details[open] > summary::before {
+      content: "－";
+      background: var(--cyan-glow);
+    }
+
+    .meta {
+      margin-left: 8px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      font-size: 10px;
+    }
+
+    .nested {
+      margin-top: 10px;
+      border-left: 1px solid var(--card-border);
+      padding-left: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    pre {
+      max-height: 480px;
+      overflow: auto;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: #000000;
+      color: #a5f3fc;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .warning-badge {
+      display: inline-flex;
+      background: var(--red-glow);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+      color: var(--red-accent);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 960px) {
+      .hero-header {
+        grid-template-columns: 1fr;
+        padding: 30px;
+      }
+      .status-panel {
+        width: 100%;
+      }
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        width: calc(100% - 24px);
+        padding-top: 24px;
+      }
+      .hero-header, .search-section, .section-card {
+        padding: 20px;
+      }
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .search-row {
+        flex-direction: column;
+      }
+      .search-btn {
+        width: 100%;
+      }
+      .fields-grid {
+        grid-template-columns: 1fr;
+      }
+      .field-box.wide, .field-box.full {
+        grid-column: span 1;
+      }
+      .treerow {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-<main class="page">
-<section class="hero"><div class="heroin"><div><div class="brand"><img src="icone.png" alt="Brasão da Polícia Civil de Goiás"><div class="brand-text"><div class="eyebrow">Consulta integrada</div><div class="brand-unit">LABLD PCGO</div></div></div><h1>CNPJ empresarial e instituições supervisionadas pelo Banco Central</h1><p>Ferramenta única, em HTML puro, para consultar dados cadastrais de empresas e instituições autorizadas pelo Banco Central.</p></div><div class="panel"><h2>Fontes integradas</h2><p class="sub">Cada módulo possui resumo, JSON bruto, cópia de dados e renderização dinâmica dos campos retornados.</p><div class="chips"><span class="chip">HTML único</span><span class="chip">Sem bibliotecas externas</span><span class="chip">CNPJ WS</span><span class="chip">OData BCB</span></div></div></div></section>
-<nav class="tabs"><button id="tabCnpj" class="tab active" type="button">Consulta CNPJ</button><button id="tabBcb" class="tab" type="button">Consulta Banco Central</button></nav>
-<section id="cnpjTool" class="tool active">
-<form id="cnpjForm" class="search"><label for="cnpjInput">CNPJ</label><div class="row"><input id="cnpjInput" class="input" inputmode="numeric" autocomplete="off" maxlength="18" placeholder="00.000.000/0000-00"><button id="cnpjBtn" class="btn" type="submit">Consultar CNPJ</button></div><div class="chips"><span class="chip">Máscara automática</span><span class="chip">Inscrições estaduais</span><span class="chip">JSON completo</span></div></form>
-<div id="cnpjErr" class="error"></div><div id="cnpjLoad" class="loading">Consultando CNPJ...</div><div id="cnpjEmpty" class="empty">Informe um CNPJ para iniciar.</div>
-<div id="cnpjOut" style="display:none"><div id="cnpjSummary" class="summarygrid"></div><section class="section"><div class="head"><div><h2>Resumo do cadastro</h2><div id="cnpjCount" class="sub"></div></div><div class="actions"><button id="cnpjRawBtn" class="btn2" type="button">Ver JSON bruto</button><button id="cnpjCopy" class="btn3" type="button">Copiar JSON</button></div></div><div id="cnpjInfo" class="infogrid"></div><div style="margin-top:24px"><h3>Inscrições estaduais</h3><div id="cnpjIE"></div></div></section><section id="cnpjRawBox" class="section raw"><h2>JSON bruto</h2><p id="cnpjRawSub" class="sub"></p><pre id="cnpjRaw"></pre></section><section class="section"><h2>Todos os dados retornados</h2><p class="sub">Renderização automática e recursiva do JSON.</p><div id="cnpjTree" class="tree"></div></section></div>
-</section>
-<section id="bcbTool" class="tool">
-<form id="bcbForm" class="search"><div class="grid"><div><label for="bcbQ">Nome, CNPJ, cidade, UF ou segmento</label><input id="bcbQ" class="input" autocomplete="off" placeholder="Exemplo: Banco do Brasil, Nubank, 00.000.000/0000-00, SP"></div><div><label for="bcbFonte">Tipo de instituição</label><select id="bcbFonte" class="select"><option value="all">Todos os tipos</option><option value="SedesBancoComMultCE">Bancos comerciais, múltiplos e Caixa Econômica</option><option value="SedesCooperativas">Cooperativas de crédito</option><option value="SedesSociedades">Sociedades</option><option value="SedesConsorcios">Administradoras de consórcios</option></select></div><button id="bcbBtn" class="btn" type="submit">Consultar Banco Central</button></div><div class="chips"><span class="chip">Dados abertos BCB</span><span class="chip">Busca local</span><span class="chip">Busca por raiz do CNPJ</span></div></form>
-<div id="bcbErr" class="error"></div><div id="bcbLoad" class="loading">Consultando bases do Banco Central...</div><div class="stats"><div class="card"><div class="lbl">Bases</div><div id="bcbBases" class="val">0</div></div><div class="card"><div class="lbl">Registros</div><div id="bcbRegs" class="val">0</div></div><div class="card"><div class="lbl">Resultados</div><div id="bcbRes" class="val">0</div></div><div class="card"><div class="lbl">Campos preenchidos</div><div id="bcbFields" class="val">0</div></div></div>
-<section class="section"><div class="head"><div><h2>Resultados encontrados</h2><div id="bcbSub" class="sub">Faça uma busca para carregar as instituições.</div></div><div class="actions"><button id="bcbRawBtn" class="btn2" type="button" disabled>Ver JSON bruto</button><button id="bcbCopy" class="btn3" type="button" disabled>Copiar JSON</button></div></div><div id="bcbList" class="list"><div class="empty">Informe um termo de busca e clique em consultar.</div></div></section><section id="bcbRawBox" class="section raw"><h2>JSON bruto dos resultados</h2><p id="bcbRawSub" class="sub"></p><pre id="bcbRaw"></pre></section><section class="section"><h2>Todos os dados retornados</h2><p class="sub">Renderização automática e recursiva dos registros encontrados.</p><div id="bcbTree" class="tree"><div class="empty">Nenhum registro carregado.</div></div></section>
-</section>
-</main>
-<script>
-const DATASETS=[{id:"SedesBancoComMultCE",label:"Bancos comerciais, múltiplos e Caixa Econômica",url:"https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesBancoComMultCE?$top=10000&$format=json"},{id:"SedesCooperativas",label:"Cooperativas de crédito",url:"https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesCooperativas?$top=10000&$format=json"},{id:"SedesSociedades",label:"Sociedades",url:"https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesSociedades?$top=10000&$format=json"},{id:"SedesConsorcios",label:"Administradoras de consórcios",url:"https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesConsorcios?$top=10000&$format=json"}];
-const $=id=>document.getElementById(id);const cState={data:null,raw:false};const bState={all:[],rows:[],loaded:false,raw:false};
-function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function dig(v){return String(v||"").replace(/\D/g,"")}function norm(v){return String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}function cnpj(v){let d=dig(v).slice(0,14);let f=d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2");return f||v||"Não informado"}function cep(v){let d=dig(v).slice(0,8);return d.length===8?d.replace(/^(\d{5})(\d{3})$/, "$1-$2"):(v||"Não informado")}function fone(ddd,t){let d=dig(ddd),p=dig(t);if(!d&&!p)return"Não informado";if(p.length===9)return`(${d}) ${p.slice(0,5)}-${p.slice(5)}`;if(p.length===8)return`(${d}) ${p.slice(0,4)}-${p.slice(4)}`;return[d?`(${d})`:"",t].filter(Boolean).join(" ")}function data(v){if(!v||typeof v!=="string")return v;let ok=/^\d{4}-\d{2}-\d{2}/.test(v);if(!ok)return v;let dt=new Date(v);if(Number.isNaN(dt.getTime()))return v;return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",...(v.includes("T")?{hour:"2-digit",minute:"2-digit"}:{})}).format(dt)}function brl(v){let n=typeof v==="number"?v:Number(String(v).replace(",","."));return Number.isFinite(n)?new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(n):(v||"Não informado")}function title(k){let s={cnpj:"CNPJ",cpf:"CPF",cep:"CEP",uf:"UF",cnae:"CNAE",ddd:"DDD",email:"E-mail",ispb:"ISPB",mei:"MEI",inscricoes_estaduais:"Inscrições estaduais"};let l=String(k||"").toLowerCase();return s[l]||String(k||"").replaceAll("_"," ").replace(/\b\w/g,a=>a.toUpperCase())}function auto(k,v){if(v===null||v===undefined||v==="")return"Não informado";let x=String(k||"").toLowerCase();if(typeof v==="boolean")return v?"Sim":"Não";if(x.includes("cnpj")||x==="documento")return cnpj(v);if(x.includes("cep"))return cep(v);if(x.includes("capital_social"))return brl(v);if(x.includes("data")||x.endsWith("_em"))return data(v);return String(v)}function filled(v){if(v===null||v===undefined)return false;if(typeof v==="string")return v.trim()!=="";if(Array.isArray(v))return v.length>0;if(typeof v==="object")return Object.values(v).some(filled);return true}function count(v){if(!filled(v))return 0;if(Array.isArray(v))return v.reduce((a,b)=>a+count(b),0);if(typeof v==="object")return Object.values(v).reduce((a,b)=>a+count(b),0);return 1}
-function tree(v,k="raiz",d=0){if(v===null||v===undefined||v==="")return'<span class="muted">Não informado</span>';if(Array.isArray(v)){if(!v.length)return'<span class="muted">Lista vazia</span>';return`<div class="tree">${v.map((it,i)=>`<details class="arr" ${d<1?"open":""}><summary>Item ${i+1}</summary><div class="nested">${tree(it,k+"_"+i,d+1)}</div></details>`).join("")}</div>`}if(typeof v==="object"){let e=Object.entries(v);if(!e.length)return'<span class="muted">Objeto vazio</span>';return`<div class="tree">${e.map(([key,it])=>it&&typeof it==="object"?`<details class="node" ${d<1?"open":""}><summary>${esc(title(key))}<span class="meta">${Array.isArray(it)?it.length+" item(ns)":"Objeto"}</span></summary><div class="nested">${tree(it,key,d+1)}</div></details>`:`<div class="node"><div class="treerow"><div class="key">${esc(title(key))}</div><div class="tval">${esc(auto(key,it))}</div></div></div>`).join("")}</div>`}return`<span class="tval">${esc(auto(k,v))}</span>`}
-function err(id,msg){$(id).textContent=msg||"";$(id).classList.toggle("show",!!msg)}function load(id,btn,text,on){$(id).classList.toggle("show",on);$(btn).disabled=on;$(btn).textContent=on?"Consultando...":text}function tab(t){let c=t==="cnpj";$('tabCnpj').classList.toggle('active',c);$('tabBcb').classList.toggle('active',!c);$('cnpjTool').classList.toggle('active',c);$('bcbTool').classList.toggle('active',!c)}
-function resumoCnpj(j){let e=j.estabelecimento||{};let end=[e.tipo_logradouro,e.logradouro,e.numero,e.complemento,e.bairro,cep(e.cep)].filter(x=>x&&x!=="Não informado").join(", ");let cidade=[e.cidade?.nome,e.estado?.sigla].filter(Boolean).join("/");let cnae=e.atividade_principal?`${e.atividade_principal.id||""} ${e.atividade_principal.descricao||""}`.trim():"Não informado";let ies=e.inscricoes_estaduais||j.inscricoes_estaduais||[];return{e,end,cidade,cnae,ies}}
-function renderCnpj(j){cState.data=j;cState.raw=false;$('cnpjOut').style.display='block';$('cnpjEmpty').style.display='none';$('cnpjRawBox').classList.remove('show');$('cnpjRawBtn').textContent='Ver JSON bruto';let r=resumoCnpj(j);$('cnpjSummary').innerHTML=[['Razão social',j.razao_social,1],['Nome fantasia',r.e.nome_fantasia],['Situação cadastral',r.e.situacao_cadastral,0,1],['Capital social',brl(j.capital_social)]].map(a=>`<article class="summary ${a[2]?"featured":""}"><div class="lbl">${esc(a[0])}</div>${a[3]?`<div class="badge">${esc(a[1]||"Não informado")}</div>`:`<div class="val">${esc(a[1]||"Não informado")}</div>`}</article>`).join("");$('cnpjCount').textContent=`${count(j)} campos preenchidos identificados no retorno da API.`;let infos=[['CNPJ',cnpj(r.e.cnpj||j.cnpj)],['Razão social',j.razao_social],['Fantasia',r.e.nome_fantasia],['Situação',r.e.situacao_cadastral],['Endereço',r.end||'Não informado',1],['Cidade/UF',r.cidade||'Não informado'],['CNAE principal',r.cnae,1],['Telefone',fone(r.e.ddd1,r.e.telefone1)],['E-mail',r.e.email||'Não informado']];$('cnpjInfo').innerHTML=infos.map(x=>`<div class="info ${x[2]?"wide":""}"><div class="lbl">${esc(x[0])}</div><div class="infoval">${esc(x[1]||"Não informado")}</div></div>`).join("");$('cnpjIE').innerHTML=Array.isArray(r.ies)&&r.ies.length?`<div class="tablewrap"><table><thead><tr><th>Inscrição</th><th>Estado</th><th>Ativo</th><th>Atualizado em</th></tr></thead><tbody>${r.ies.map(i=>`<tr><td>${esc(i.inscricao_estadual||"Não informado")}</td><td>${esc(i.estado?.sigla||i.estado_id||"Não informado")}</td><td>${esc(auto('ativo',i.ativo))}</td><td>${esc(auto('atualizado_em',i.atualizado_em))}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">Nenhuma inscrição estadual retornada.</div>';let raw=JSON.stringify(j,null,2);$('cnpjRaw').textContent=raw;$('cnpjRawSub').textContent=`${new Blob([JSON.stringify(j)]).size.toLocaleString('pt-BR')} bytes.`;$('cnpjTree').innerHTML=tree(j)}
-async function consultarCnpj(e){e.preventDefault();err('cnpjErr','');let d=dig($('cnpjInput').value);if(d.length!==14){$('cnpjOut').style.display='none';$('cnpjEmpty').style.display='none';err('cnpjErr','Informe um CNPJ válido com 14 dígitos.');return}load('cnpjLoad','cnpjBtn','Consultar CNPJ',true);$('cnpjOut').style.display='none';$('cnpjEmpty').style.display='none';try{let r=await fetch(`https://publica.cnpj.ws/cnpj/${d}`);if(!r.ok){if(r.status===404)throw new Error('CNPJ não encontrado.');if(r.status===429)throw new Error('Limite de consultas atingido. Aguarde e tente novamente.');throw new Error(`Falha na consulta. Código HTTP ${r.status}.`)}renderCnpj(await r.json())}catch(ex){err('cnpjErr',ex.message||'Não foi possível consultar o CNPJ.')}finally{load('cnpjLoad','cnpjBtn','Consultar CNPJ',false)}}
-function first(row,keys){let e=Object.entries(row||{});for(let w of keys){let f=e.find(([k,v])=>norm(k).includes(norm(w))&&filled(v));if(f)return f[1]}return""}function text(row){return norm(Object.values(row).map(v=>v&&typeof v==="object"?JSON.stringify(v):String(v??"")).join(" "))}async function fetchDs(ds){let r=await fetch(ds.url);if(!r.ok)throw new Error(`Falha ao consultar ${ds.label}. Código HTTP ${r.status}.`);let j=await r.json();return(Array.isArray(j.value)?j.value:[]).map(x=>({...x,__base:ds.label,__base_id:ds.id}))}async function loadBcb(){if(bState.loaded)return;let sel=$('bcbFonte').value;let d=sel==='all'?DATASETS:DATASETS.filter(x=>x.id===sel);let all=await Promise.all(d.map(fetchDs));bState.all=all.flat();bState.loaded=true;$('bcbBases').textContent=String(d.length);$('bcbRegs').textContent=bState.all.length.toLocaleString('pt-BR')}function termosNumericosBusca(v){let raw=String(v||''),nums=(raw.match(/[0-9][0-9./-]{2,}[0-9]/g)||[]).map(dig).filter(Boolean),todos=dig(raw);if(todos)nums.push(todos);let termos=[];nums.forEach(n=>{termos.push(n);if(n.length>=8)termos.push(n.slice(0,8));termos.push(n.replace(/^0+/,''));if(n.length>=8)termos.push(n.slice(0,8).replace(/^0+/,''));});return [...new Set(termos.filter(Boolean))]}function filterBcb(){let entrada=$('bcbQ').value,q=norm(entrada),termos=termosNumericosBusca(entrada);if(!q&&!termos.length)return bState.all.slice(0,100);return bState.all.filter(r=>{let t=text(r),ds=dig(t),dsSemZero=ds.replace(/^0+/,'');return t.includes(q)||termos.some(term=>ds.includes(term)||dsSemZero.includes(term))}).slice(0,200)}function renderBcb(){let rows=bState.rows;$('bcbRes').textContent=rows.length.toLocaleString('pt-BR');$('bcbFields').textContent=count(rows).toLocaleString('pt-BR');$('bcbSub').textContent=rows.length?`Exibindo até 200 resultados. Total nesta tela: ${rows.length.toLocaleString('pt-BR')}.`:'Nenhum resultado encontrado.';$('bcbRawBtn').disabled=!rows.length;$('bcbCopy').disabled=!rows.length;$('bcbList').innerHTML=rows.length?rows.map((r,i)=>{let nome=first(r,['nome','razao','instituicao','denominacao']),doc=first(r,['cnpj','documento']),seg=first(r,['segmento','tipo','classe']),cid=first(r,['municipio','cidade']),uf=first(r,['uf','estado']),end=first(r,['endereco','logradouro']),bairro=first(r,['bairro']),c=first(r,['cep']),tel=first(r,['telefone','fone']);return`<article class="res"><div class="restop"><div><div class="title">${esc(nome||`Registro ${i+1}`)}</div><div class="sub">${esc(r.__base)}</div></div><span class="badge">Encontrado</span></div><div class="infogrid"><div class="info"><div class="lbl">CNPJ</div><div class="infoval">${esc(cnpj(doc))}</div></div><div class="info"><div class="lbl">Segmento ou tipo</div><div class="infoval">${esc(seg||'Não informado')}</div></div><div class="info"><div class="lbl">Cidade/UF</div><div class="infoval">${esc([cid,uf].filter(Boolean).join('/')||'Não informado')}</div></div><div class="info wide"><div class="lbl">Endereço</div><div class="infoval">${esc([end,bairro,cep(c)].filter(x=>x&&x!=='Não informado').join(', ')||'Não informado')}</div></div><div class="info"><div class="lbl">Telefone</div><div class="infoval">${esc(tel||'Não informado')}</div></div></div></article>`}).join(''):'<div class="empty">Nenhuma instituição encontrada.</div>';let raw=JSON.stringify(rows,null,2);$('bcbRaw').textContent=raw;$('bcbRawSub').textContent=`${new Blob([JSON.stringify(rows)]).size.toLocaleString('pt-BR')} bytes.`;$('bcbTree').innerHTML=rows.length?tree(rows):'<div class="empty">Nenhum registro carregado.</div>'}
-async function consultarBcb(e){e.preventDefault();err('bcbErr','');load('bcbLoad','bcbBtn','Consultar Banco Central',true);try{await loadBcb();bState.rows=filterBcb();bState.raw=false;$('bcbRawBox').classList.remove('show');$('bcbRawBtn').textContent='Ver JSON bruto';renderBcb()}catch(ex){err('bcbErr',ex.message||'Não foi possível consultar os dados do Banco Central.')}finally{load('bcbLoad','bcbBtn','Consultar Banco Central',false)}}function resetBcb(){bState.all=[];bState.rows=[];bState.loaded=false;['bcbBases','bcbRegs','bcbRes','bcbFields'].forEach(id=>$(id).textContent='0');$('bcbRawBtn').disabled=true;$('bcbCopy').disabled=true;$('bcbRawBox').classList.remove('show');$('bcbList').innerHTML='<div class="empty">Informe um termo de busca e clique em consultar.</div>';$('bcbTree').innerHTML='<div class="empty">Nenhum registro carregado.</div>';$('bcbSub').textContent='Faça uma busca para carregar as instituições.'}
-$('tabCnpj').onclick=()=>tab('cnpj');$('tabBcb').onclick=()=>tab('bcb');$('cnpjInput').oninput=e=>{e.target.value=cnpj(e.target.value);err('cnpjErr','')};$('cnpjForm').onsubmit=consultarCnpj;$('bcbForm').onsubmit=consultarBcb;$('bcbFonte').onchange=resetBcb;$('cnpjRawBtn').onclick=()=>{cState.raw=!cState.raw;$('cnpjRawBox').classList.toggle('show',cState.raw);$('cnpjRawBtn').textContent=cState.raw?'Ocultar JSON bruto':'Ver JSON bruto'};$('bcbRawBtn').onclick=()=>{bState.raw=!bState.raw;$('bcbRawBox').classList.toggle('show',bState.raw);$('bcbRawBtn').textContent=bState.raw?'Ocultar JSON bruto':'Ver JSON bruto'};$('cnpjCopy').onclick=async()=>{if(!cState.data)return;try{await navigator.clipboard.writeText(JSON.stringify(cState.data,null,2));$('cnpjCopy').textContent='JSON copiado';setTimeout(()=>$('cnpjCopy').textContent='Copiar JSON',1600)}catch{err('cnpjErr','Não foi possível copiar o JSON.')}};$('bcbCopy').onclick=async()=>{if(!bState.rows.length)return;try{await navigator.clipboard.writeText(JSON.stringify(bState.rows,null,2));$('bcbCopy').textContent='JSON copiado';setTimeout(()=>$('bcbCopy').textContent='Copiar JSON',1600)}catch{err('bcbErr','Não foi possível copiar o JSON.')}};
-</script>
+  <main>
+    <!-- Brand / Hero -->
+    <section class="hero-header">
+      <div class="brand-section">
+        <img class="brand-logo" src="icone.png" alt="Brasão PCGO">
+        <div class="brand-meta">
+          <div class="badge-eyebrow">LAB-LD PCGO • Laboratório de Tecnologia contra Lavagem de Dinheiro</div>
+          <h1>Instituições Supervisionadas e CNPJ</h1>
+          <p class="hero-desc">Consulte dados cadastrais da Receita Federal integrados com o cadastro de autorizações do Banco Central em uma única pesquisa.</p>
+        </div>
+      </div>
+      <div class="status-panel">
+        <div class="status-title">Base de Dados BCB</div>
+        <div class="status-badge">
+          <div id="statusDot" class="status-dot"></div>
+          <span id="statusText">Aguardando inicialização</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Form -->
+    <section class="search-section">
+      <form id="searchForm">
+        <label for="cnpjInput" class="search-label">CNPJ da Instituição</label>
+        <div class="search-row">
+          <input id="cnpjInput" class="search-input" inputmode="numeric" autocomplete="off" maxlength="18" placeholder="00.000.000/0000-00 ou 00.000.000">
+          <button id="searchBtn" class="search-btn" type="submit">Consultar</button>
+        </div>
+        <div class="chips">
+          <span class="chip">CNPJ Completo (14 dígitos)</span>
+          <span class="chip">CNPJ Raiz (8 dígitos)</span>
+          <span class="chip">OData Banco Central</span>
+          <span class="chip">Receita Federal (CNPJ WS)</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- Feedback Messages -->
+    <div id="mainErr" class="error-box"></div>
+    <div id="mainLoad" class="loading-box">Realizando consulta integrada...</div>
+
+    <!-- Integrated Results View -->
+    <div id="resultView" class="result-view" style="display: none;">
+      
+      <!-- Summary Grid -->
+      <div id="summaryGrid" class="summary-grid"></div>
+
+      <!-- Optional warning if CNPJ WS failed but BCB worked -->
+      <div id="apiWarning" class="warning-badge" style="display: none;"></div>
+
+      <!-- Split Detail Grid -->
+      <div class="details-grid">
+        
+        <!-- Left: Cadastral Info from Receita Federal -->
+        <section id="cnpjInfoSection" class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Cadastro da Receita Federal</h2>
+              <div class="section-subtitle">Dados oficiais do CNPJ informados pela empresa</div>
+            </div>
+          </div>
+          <div id="cnpjFields" class="fields-grid"></div>
+          
+          <div style="margin-top: 24px;">
+            <h2>Inscrições Estaduais</h2>
+            <div id="cnpjIE"></div>
+          </div>
+        </section>
+
+        <!-- Right: BCB Supervision Info -->
+        <section id="bcbSection" class="section-card bcb-card">
+          <div class="section-header">
+            <div>
+              <h2>Supervisão Banco Central</h2>
+              <div class="section-subtitle">Status de autorizações e bases OData</div>
+            </div>
+            <div id="bcbHeaderBadge" class="bcb-header-badge" style="display: none;">🛡️ Supervisionado</div>
+          </div>
+          <div id="bcbContent"></div>
+        </section>
+      </div>
+
+      <!-- Full Data JSON Explorer -->
+      <section class="section-card">
+        <div class="section-header">
+          <div>
+            <h2>Explorador de Dados</h2>
+            <div class="section-subtitle">Retorno completo em estrutura de dados recursiva</div>
+          </div>
+          <div class="action-group">
+            <button id="rawBtn" class="btn-secondary" type="button">Ver JSON Bruto</button>
+            <button id="copyBtn" class="btn-accent" type="button">Copiar JSON</button>
+          </div>
+        </div>
+        
+        <!-- Raw JSON block -->
+        <div id="rawBox" class="tree-box" style="display: none; margin-bottom: 20px;">
+          <pre id="rawContent"></pre>
+        </div>
+
+        <div id="treeView" class="tree-box"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Banco Central OData sets configuration
+    const DATASETS = [
+      { id: "SedesBancoComMultCE", label: "Bancos comerciais, múltiplos e Caixa Econômica", url: "https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesBancoComMultCE?$top=10000&$format=json" },
+      { id: "SedesCooperativas", label: "Cooperativas de crédito", url: "https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesCooperativas?$top=10000&$format=json" },
+      { id: "SedesSociedades", label: "Sociedades", url: "https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesSociedades?$top=10000&$format=json" },
+      { id: "SedesConsorcios", label: "Administradoras de consórcios", url: "https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/SedesConsorcios?$top=10000&$format=json" }
+    ];
+
+    const $ = id => document.getElementById(id);
+    const searchState = { cnpjData: null, bcbMatches: [], viewRaw: false };
+    const bcbState = { all: [], loaded: false, loading: false };
+
+    // --- UTILITIES ---
+    function esc(v) {
+      return String(v ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+    }
+
+    function dig(v) {
+      return String(v || "").replace(/\D/g, "");
+    }
+
+    function norm(v) {
+      return String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    }
+
+    function cnpj(v) {
+      let d = dig(v).slice(0, 14);
+      let f = d.replace(/^(\d{2})(\d)/, "$1.$2")
+               .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+               .replace(/\.(\d{3})(\d)/, ".$1/$2")
+               .replace(/(\d{4})(\d)/, "$1-$2");
+      return f || v || "Não informado";
+    }
+
+    function cep(v) {
+      let d = dig(v).slice(0, 8);
+      return d.length === 8 ? d.replace(/^(\d{5})(\d{3})$/, "$1-$2") : (v || "Não informado");
+    }
+
+    function fone(ddd, t) {
+      let d = dig(ddd), p = dig(t);
+      if (!d && !p) return "Não informado";
+      if (p.length === 9) return `(${d}) ${p.slice(0, 5)}-${p.slice(5)}`;
+      if (p.length === 8) return `(${d}) ${p.slice(0, 4)}-${p.slice(4)}`;
+      return [d ? `(${d})` : "", t].filter(Boolean).join(" ");
+    }
+
+    function data(v) {
+      if (!v || typeof v !== "string") return v;
+      let ok = /^\d{4}-\d{2}-\d{2}/.test(v);
+      if (!ok) return v;
+      let dt = new Date(v);
+      if (Number.isNaN(dt.getTime())) return v;
+      return new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        ...(v.includes("T") ? { hour: "2-digit", minute: "2-digit" } : {})
+      }).format(dt);
+    }
+
+    function brl(v) {
+      let n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
+      return Number.isFinite(n) ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n) : (v || "Não informado");
+    }
+
+    function title(k) {
+      let s = {
+        cnpj: "CNPJ", cpf: "CPF", cep: "CEP", uf: "UF", cnae: "CNAE", ddd: "DDD",
+        email: "E-mail", ispb: "ISPB", mei: "MEI", inscricoes_estaduais: "Inscrições estaduais"
+      };
+      let l = String(k || "").toLowerCase();
+      return s[l] || String(k || "").replaceAll("_", " ").replace(/\b\w/g, a => a.toUpperCase());
+    }
+
+    function auto(k, v) {
+      if (v === null || v === undefined || v === "") return "Não informado";
+      let x = String(k || "").toLowerCase();
+      if (typeof v === "boolean") return v ? "Sim" : "Não";
+      if (x.includes("cnpj") || x === "documento") return cnpj(v);
+      if (x.includes("cep")) return cep(v);
+      if (x.includes("capital_social")) return brl(v);
+      if (x.includes("data") || x.endsWith("_em")) return data(v);
+      return String(v);
+    }
+
+    function filled(v) {
+      if (v === null || v === undefined) return false;
+      if (typeof v === "string") return v.trim() !== "";
+      if (Array.isArray(v)) return v.length > 0;
+      if (typeof v === "object") return Object.values(v).some(filled);
+      return true;
+    }
+
+    function count(v) {
+      if (!filled(v)) return 0;
+      if (Array.isArray(v)) return v.reduce((a, b) => a + count(b), 0);
+      if (typeof v === "object") return Object.values(v).reduce((a, b) => a + count(b), 0);
+      return 1;
+    }
+
+    // --- RECURSIVE DATA TREE RENDERING ---
+    function tree(v, k = "raiz", d = 0) {
+      if (v === null || v === undefined || v === "") return '<span class="text-muted">Não informado</span>';
+      
+      if (Array.isArray(v)) {
+        if (!v.length) return '<span class="text-muted">Lista vazia</span>';
+        return `<div class="tree">${v.map((it, i) => `
+          <details class="arr" ${d < 1 ? "open" : ""}>
+            <summary>Item ${i + 1}</summary>
+            <div class="nested">${tree(it, k + "_" + i, d + 1)}</div>
+          </details>`).join("")}</div>`;
+      }
+      
+      if (typeof v === "object") {
+        let e = Object.entries(v);
+        if (!e.length) return '<span class="text-muted">Objeto vazio</span>';
+        return `<div class="tree">${e.map(([key, it]) => it && typeof it === "object" ? `
+          <details class="node" ${d < 1 ? "open" : ""}>
+            <summary>${esc(title(key))}<span class="meta">${Array.isArray(it) ? it.length + " item(ns)" : "Objeto"}</span></summary>
+            <div class="nested">${tree(it, key, d + 1)}</div>
+          </details>` : `
+          <div class="node">
+            <div class="treerow">
+              <div class="key">${esc(title(key))}</div>
+              <div class="tval">${esc(auto(key, it))}</div>
+            </div>
+          </div>`).join("")}</div>`;
+      }
+      
+      return `<span class="tval">${esc(auto(k, v))}</span>`;
+    }
+
+    // --- CNPJ 8-TO-14 DIGITS AUTOCOMPLETION ---
+    function completarCnpjRaiz(raiz) {
+      const digits = (raiz + "0001").split("").map(Number);
+      const w1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+      let sum1 = 0;
+      for (let i = 0; i < 12; i++) sum1 += digits[i] * w1[i];
+      const r1 = sum1 % 11;
+      const n13 = r1 < 2 ? 0 : 11 - r1;
+      digits.push(n13);
+      
+      const w2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+      let sum2 = 0;
+      for (let i = 0; i < 13; i++) sum2 += digits[i] * w2[i];
+      const r2 = sum2 % 11;
+      const n14 = r2 < 2 ? 0 : 11 - r2;
+      return raiz + "0001" + n13 + n14;
+    }
+
+    // --- SYSTEM FEEDBACKS ---
+    function err(id, msg) {
+      $(id).textContent = msg || "";
+      $(id).classList.toggle("show", !!msg);
+    }
+
+    function load(id, btn, textVal, on) {
+      $(id).classList.toggle("show", on);
+      $(btn).disabled = on;
+      $(btn).textContent = on ? "Processando..." : textVal;
+    }
+
+    // --- DATA LOADING (BANCO CENTRAL) ---
+    async function fetchDs(ds) {
+      let r = await fetch(ds.url);
+      if (!r.ok) throw new Error(`Falha ao consultar ${ds.label}. Código HTTP ${r.status}.`);
+      let j = await r.json();
+      return (Array.isArray(j.value) ? j.value : []).map(x => {
+        let txt = text(x);
+        return { ...x, __base: ds.label, __base_id: ds.id, __searchStr: txt };
+      });
+    }
+
+    async function loadBcb() {
+      if (bcbState.loaded || bcbState.loading) return;
+      bcbState.loading = true;
+      
+      // Update UI Status to Loading
+      const dot = $("statusDot");
+      const txt = $("statusText");
+      dot.className = "status-dot loading";
+      txt.textContent = "Carregando bases do BCB...";
+
+      try {
+        let results = await Promise.allSettled(DATASETS.map(fetchDs));
+        let all = [];
+        let failed = [];
+
+        results.forEach((res, i) => {
+          if (res.status === 'fulfilled') {
+            all.push(res.value);
+          } else {
+            failed.push(DATASETS[i].label);
+            console.error(`Erro ao carregar base ${DATASETS[i].label}:`, res.reason);
+          }
+        });
+
+        bcbState.all = all.flat();
+        bcbState.loaded = true;
+        
+        if (failed.length > 0) {
+          dot.className = "status-dot loading";
+          txt.textContent = `Carregado parcialmente (${bcbState.all.length.toLocaleString('pt-BR')} registros)`;
+          err('mainErr', `Aviso: Algumas bases do Banco Central falharam no carregamento: ${failed.join(', ')}. Os dados de supervisão do BCB podem estar incompletos.`);
+        } else {
+          dot.className = "status-dot active";
+          txt.textContent = `Integrado (${bcbState.all.length.toLocaleString('pt-BR')} registros)`;
+        }
+      } catch (ex) {
+        dot.className = "status-dot";
+        txt.textContent = "Falha ao carregar bases";
+        console.error("Erro crítico ao carregar Banco Central:", ex);
+      } finally {
+        bcbState.loading = false;
+      }
+    }
+
+    // --- RENDERING ---
+    function resumoCnpj(j) {
+      let e = j.estabelecimento || {};
+      let end = [e.tipo_logradouro, e.logradouro, e.numero, e.complemento, e.bairro, cep(e.cep)].filter(x => x && x !== "Não informado").join(", ");
+      let cidade = [e.cidade?.nome, e.estado?.sigla].filter(Boolean).join("/");
+      let cnae = e.atividade_principal ? `${e.atividade_principal.id || ""} - ${e.atividade_principal.descricao || ""}`.trim() : "Não informado";
+      let ies = e.inscricoes_estaduais || j.inscricoes_estaduais || [];
+      return { e, end, cidade, cnae, ies };
+    }
+
+    function first(row, keys) {
+      let e = Object.entries(row || {});
+      for (let w of keys) {
+        let f = e.find(([k, v]) => norm(k).includes(norm(w)) && filled(v));
+        if (f) return f[1];
+      }
+      return "";
+    }
+
+    function text(row) {
+      return norm(Object.values(row).map(v => v && typeof v === "object" ? JSON.stringify(v) : String(v ?? "")).join(" "));
+    }
+
+    function renderResultado(cnpjData, bcbMatches, cnpjError) {
+      searchState.cnpjData = cnpjData;
+      searchState.bcbMatches = bcbMatches;
+      searchState.viewRaw = false;
+
+      $('apiWarning').style.display = 'none';
+      $('rawBox').style.display = 'none';
+      $('rawBtn').textContent = 'Ver JSON Bruto';
+
+      // 1. Build Summary Cards Grid
+      let summaryHtml = "";
+      if (cnpjData) {
+        let r = resumoCnpj(cnpjData);
+        summaryHtml = `
+          <article class="summary-card featured">
+            <div class="card-label">Razão Social</div>
+            <div class="card-value">${esc(cnpjData.razao_social)}</div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">Nome Fantasia</div>
+            <div class="card-value">${esc(r.e.nome_fantasia || "Não informado")}</div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">Situação Cadastral</div>
+            <div><span class="badge-status">${esc(r.e.situacao_cadastral || "Ativa")}</span></div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">Capital Social</div>
+            <div class="card-value">${brl(cnpjData.capital_social)}</div>
+          </article>
+        `;
+      } else if (bcbMatches.length > 0) {
+        // Fallback using BCB data if RF API failed
+        let firstMatch = bcbMatches[0];
+        let nomeBCB = first(firstMatch, ['nome', 'razao', 'instituicao', 'denominacao']);
+        let docBCB = first(firstMatch, ['cnpj', 'documento']);
+        
+        $('apiWarning').textContent = `Nota: Não foi possível carregar os dados cadastrais da Receita Federal (${cnpjError}). Exibindo apenas dados locais do Banco Central.`;
+        $('apiWarning').style.display = 'inline-flex';
+
+        summaryHtml = `
+          <article class="summary-card featured">
+            <div class="card-label">Instituição (Banco Central)</div>
+            <div class="card-value">${esc(nomeBCB)}</div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">CNPJ Informado</div>
+            <div class="card-value">${esc(cnpj(docBCB))}</div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">Situação BCB</div>
+            <div><span class="badge-status" style="background:var(--green-glow); color:var(--green-accent);">Supervisionado</span></div>
+          </article>
+          <article class="summary-card">
+            <div class="card-label">Bases Localizadas</div>
+            <div class="card-value">${bcbMatches.length} base(s)</div>
+          </article>
+        `;
+      }
+      $('summaryGrid').innerHTML = summaryHtml;
+
+      // 2. Build Receita Federal detailed fields
+      if (cnpjData) {
+        $('cnpjInfoSection').style.display = 'block';
+        let r = resumoCnpj(cnpjData);
+        let fields = [
+          ['CNPJ', cnpj(r.e.cnpj || cnpjData.cnpj), false],
+          ['Razão Social', cnpjData.razao_social, true],
+          ['Nome Fantasia', r.e.nome_fantasia || 'Não informado', true],
+          ['Situação Cadastral', r.e.situacao_cadastral, false],
+          ['Endereço Completo', r.end || 'Não informado', true],
+          ['Cidade / UF', r.cidade || 'Não informado', false],
+          ['Atividade Econômica (CNAE)', r.cnae, true],
+          ['Telefone Principal', fone(r.e.ddd1, r.e.telefone1), false],
+          ['E-mail de Contato', cnpjData.estabelecimento?.email || 'Não informado', false]
+        ];
+
+        $('cnpjFields').innerHTML = fields.map(f => `
+          <div class="field-box ${f[2] ? 'wide' : ''}">
+            <div class="field-label">${esc(f[0])}</div>
+            <div class="field-value">${esc(f[1])}</div>
+          </div>
+        `).join("");
+
+        $('cnpjIE').innerHTML = Array.isArray(r.ies) && r.ies.length ? `
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Inscrição</th>
+                  <th>UF</th>
+                  <th>Ativo</th>
+                  <th>Atualizado em</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${r.ies.map(i => `
+                  <tr>
+                    <td>${esc(i.inscricao_estadual || "Não informado")}</td>
+                    <td>${esc(i.estado?.sigla || i.estado_id || "Não informado")}</td>
+                    <td>${esc(auto('ativo', i.ativo))}</td>
+                    <td>${esc(auto('atualizado_em', i.atualizado_em))}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        ` : '<div style="margin-top: 10px; color: var(--text-muted); font-size: 13px;">Nenhuma inscrição estadual registrada.</div>';
+      } else {
+        $('cnpjInfoSection').style.display = 'none';
+      }
+
+      // 3. Build Banco Central Supervision details
+      const bcbBadge = $('bcbHeaderBadge');
+      if (bcbMatches.length > 0) {
+        bcbBadge.style.display = 'inline-flex';
+        
+        let bcbContentHtml = bcbMatches.map((m, idx) => {
+          let nome = first(m, ['nome', 'razao', 'instituicao', 'denominacao']);
+          let doc = first(m, ['cnpj', 'documento']);
+          let seg = first(m, ['segmento', 'tipo', 'classe']);
+          let cid = first(m, ['municipio', 'cidade']);
+          let uf = first(m, ['uf', 'estado']);
+          let end = first(m, ['endereco', 'logradouro']);
+          let bairro = first(m, ['bairro']);
+          let c = first(m, ['cep']);
+          let tel = first(m, ['telefone', 'fone']);
+
+          let fields = [
+            ['Instituição no BCB', nome, true],
+            ['CNPJ Registrado', cnpj(doc), false],
+            ['Segmento / Categoria', seg || 'Não informado', false],
+            ['Cidade / UF', [cid, uf].filter(Boolean).join('/') || 'Não informado', false],
+            ['Endereço Cadastrado', [end, bairro, cep(c)].filter(x => x && x !== 'Não informado').join(', ') || 'Não informado', true],
+            ['Telefone Contato', tel || 'Não informado', false]
+          ];
+
+          return `
+            <div style="${idx > 0 ? 'margin-top: 24px; border-top: 1px dashed var(--card-border); padding-top: 24px;' : ''}">
+              <div style="font-size:12px; font-weight:700; color:var(--green-accent); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.04em;">
+                Base OData: ${esc(m.__base)}
+              </div>
+              <div class="fields-grid" style="grid-template-columns: 1fr 1fr;">
+                ${fields.map(f => `
+                  <div class="field-box ${f[2] ? 'full' : ''}" style="background: rgba(52, 211, 153, 0.01); border-color: rgba(52, 211, 153, 0.08);">
+                    <div class="field-label" style="color: rgba(52, 211, 153, 0.7);">${esc(f[0])}</div>
+                    <div class="field-value">${esc(f[1])}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        $('bcbContent').innerHTML = bcbContentHtml;
+      } else {
+        bcbBadge.style.display = 'none';
+        $('bcbContent').innerHTML = `
+          <div class="bcb-warning-box">
+            <div class="bcb-warning-icon">⚠️</div>
+            <div style="font-weight: 700; color: #ffffff; margin-bottom: 4px;">Não supervisionada</div>
+            <div style="font-size: 13px; line-height: 1.5;">Esta empresa não foi localizada nas bases de dados de instituições sob regulação ou fiscalização do Banco Central do Brasil.</div>
+          </div>
+        `;
+      }
+
+      // 4. Raw JSON setup and Tree View
+      const combinedPayload = {
+        cnpjWs: cnpjData,
+        bancoCentral: bcbMatches
+      };
+      
+      $('rawContent').textContent = JSON.stringify(combinedPayload, null, 2);
+      $('treeView').innerHTML = tree(combinedPayload);
+    }
+
+    // --- SEARCH FLOW CONTROL ---
+    async function realizarConsulta(e) {
+      e.preventDefault();
+      err('mainErr', '');
+      
+      let rawVal = $('cnpjInput').value;
+      let d = dig(rawVal);
+
+      if (d.length === 8) {
+        d = completarCnpjRaiz(d);
+      } else if (d.length !== 14) {
+        err('mainErr', 'Informe um CNPJ válido de 8 dígitos (raiz) ou 14 dígitos (completo).');
+        return;
+      }
+
+      load('mainLoad', 'searchBtn', 'Consultar', true);
+      $('resultView').style.display = 'none';
+
+      const root = d.slice(0, 8);
+      let cnpjResult = null;
+      let cnpjError = null;
+
+      // 1. Start CNPJ WS Fetch
+      const fetchCnpjPromise = fetch(`https://publica.cnpj.ws/cnpj/${d}`)
+        .then(async r => {
+          if (!r.ok) {
+            if (r.status === 404) throw new Error('CNPJ não encontrado na base de dados da Receita Federal.');
+            if (r.status === 429) throw new Error('Limite de requisições atingido. Por favor, aguarde alguns instantes e tente novamente.');
+            throw new Error(`Código HTTP ${r.status}.`);
+          }
+          return await r.json();
+        })
+        .then(data => { cnpjResult = data; })
+        .catch(err => { cnpjError = err.message; });
+
+      // 2. Ensure Banco Central databases are fully loaded
+      try {
+        await loadBcb();
+      } catch (ex) {
+        console.error("Falha ao carregar bases do BCB:", ex);
+      }
+
+      // 3. Search locally in BCB databases
+      const bcbMatches = bcbState.all.filter(r => {
+        let t = r.__searchStr || "";
+        let ds = dig(t);
+        return ds.includes(root); // matches the 8-digit root CNPJ
+      });
+
+      // 4. Wait for CNPJ WS to resolve
+      await fetchCnpjPromise;
+
+      // Check if both failed
+      if (!cnpjResult && bcbMatches.length === 0) {
+        err('mainErr', `Não foi possível carregar as informações. Receita Federal: ${cnpjError || 'Offline'}. Banco Central: Não localizado.`);
+        load('mainLoad', 'searchBtn', 'Consultar', false);
+        return;
+      }
+
+      // Render integrated output
+      renderResultado(cnpjResult, bcbMatches, cnpjError);
+      
+      // Reveal UI
+      $('resultView').style.display = 'block';
+      load('mainLoad', 'searchBtn', 'Consultar', false);
+    }
+
+    // --- INITIALIZATION & EVENTS ---
+    window.onload = () => {
+      // Trigger Banco Central databases load immediately on start in background
+      loadBcb();
+    };
+
+    $('searchForm').onsubmit = realizarConsulta;
+
+    // Apply cursor-jump fix to CNPJ Input
+    $('cnpjInput').oninput = e => {
+      const input = e.target;
+      const rawVal = input.value;
+      const selStart = input.selectionStart;
+      const digitsBeforeCursor = rawVal.slice(0, selStart).replace(/\D/g, "").length;
+      
+      const formatted = cnpj(rawVal);
+      input.value = formatted;
+      err('mainErr', '');
+      
+      let newPos = 0;
+      let digitsFound = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (digitsFound >= digitsBeforeCursor) break;
+        if (/\d/.test(formatted[i])) digitsFound++;
+        newPos = i + 1;
+      }
+      input.setSelectionRange(newPos, newPos);
+    };
+
+    // Raw JSON toggles
+    $('rawBtn').onclick = () => {
+      searchState.viewRaw = !searchState.viewRaw;
+      $('rawBox').style.display = searchState.viewRaw ? 'block' : 'none';
+      $('rawBtn').textContent = searchState.viewRaw ? 'Ocultar JSON Bruto' : 'Ver JSON Bruto';
+    };
+
+    $('copyBtn').onclick = async () => {
+      const rawText = $('rawContent').textContent;
+      if (!rawText) return;
+      try {
+        await navigator.clipboard.writeText(rawText);
+        $('copyBtn').textContent = 'JSON Copiado!';
+        setTimeout(() => { $('copyBtn').textContent = 'Copiar JSON'; }, 1600);
+      } catch {
+        err('mainErr', 'Não foi possível copiar o JSON para a área de transferência.');
+      }
+    };
+  </script>
 </body>
 </html>

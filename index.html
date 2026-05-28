@@ -1004,10 +1004,9 @@
       const n14 = r2 < 2 ? 0 : 11 - r2;
       return raiz + "0001" + n13 + n14;
     }
-
     // --- SYSTEM FEEDBACKS ---
     function err(id, msg) {
-      $(id).textContent = msg || "";
+      $(id).innerHTML = msg || "";
       $(id).classList.toggle("show", !!msg);
     }
 
@@ -1372,7 +1371,21 @@
         load('mainLoad', 'searchBtn', 'Consultar', false);
 
         if (matches.length === 0) {
-          err('mainErr', 'Nenhuma instituição supervisionada foi encontrada com este nome nas bases do BCB.');
+          const googleUrl = `https://www.google.com/search?q=CNPJ+${encodeURIComponent(rawVal)}`;
+          const msg = `
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <strong>⚠️ Nenhuma instituição supervisionada pelo BCB encontrada.</strong><br>
+                A busca por nome pesquisa apenas empresas reguladas pelo Banco Central. Para consultar os dados cadastrais da Receita Federal de qualquer outra empresa (comércio, indústria, etc.), por favor insira o número do CNPJ diretamente.
+              </div>
+              <div>
+                <a href="${googleUrl}" target="_blank" class="btn-accent" style="display: inline-flex; align-items: center; justify-content: center; height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; text-decoration: none; border-radius: var(--radius-sm); border: 1px solid rgba(34, 211, 238, 0.25);">
+                  🔍 Pesquisar CNPJ no Google
+                </a>
+              </div>
+            </div>
+          `;
+          err('mainErr', msg);
           return;
         }
 

@@ -746,15 +746,16 @@
     <!-- Search Form -->
     <section class="search-section">
       <form id="searchForm">
-        <label for="cnpjInput" class="search-label">CNPJ da Instituição</label>
+        <label for="cnpjInput" class="search-label">CNPJ ou Nome da Instituição</label>
         <div class="search-row">
-          <input id="cnpjInput" class="search-input" inputmode="numeric" autocomplete="off" maxlength="18" placeholder="00.000.000/0000-00 ou 00.000.000">
+          <input id="cnpjInput" class="search-input" autocomplete="off" placeholder="CNPJ (completo/raiz) ou nome da empresa (ex: Sicoob, Banco do Brasil...)">
           <button id="searchBtn" class="search-btn" type="submit">Consultar</button>
         </div>
         <div class="chips">
           <span class="chip">CNPJ Completo (14 dígitos)</span>
           <span class="chip">CNPJ Raiz (8 dígitos)</span>
-          <span class="chip">OData Banco Central</span>
+          <span class="chip">Pesquisa por Nome</span>
+          <span class="chip">Banco Central (OData)</span>
           <span class="chip">Receita Federal (CNPJ WS)</span>
         </div>
       </form>
@@ -763,6 +764,30 @@
     <!-- Feedback Messages -->
     <div id="mainErr" class="error-box"></div>
     <div id="mainLoad" class="loading-box">Realizando consulta integrada...</div>
+
+    <!-- Múltiplos Resultados de Busca por Nome -->
+    <section id="nameMatchesSection" class="section-card" style="display: none; margin-bottom: 24px; border-color: rgba(34, 211, 238, 0.25);">
+      <div class="section-header">
+        <div>
+          <h2>Instituições Encontradas (Banco Central)</h2>
+          <div class="section-subtitle">Selecione uma das instituições reguladas para detalhar os dados cadastrais</div>
+        </div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome da Instituição</th>
+              <th>CNPJ</th>
+              <th>Segmento / Categoria</th>
+              <th>Base OData</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="nameMatchesBody"></tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- Integrated Results View -->
     <div id="resultView" class="result-view" style="display: none;">
@@ -1247,22 +1272,11 @@
     }
 
     // --- SEARCH FLOW CONTROL ---
-    async function realizarConsulta(e) {
-      e.preventDefault();
+    async function consultarPorCnpj(d) {
       err('mainErr', '');
-      
-      let rawVal = $('cnpjInput').value;
-      let d = dig(rawVal);
-
-      if (d.length === 8) {
-        d = completarCnpjRaiz(d);
-      } else if (d.length !== 14) {
-        err('mainErr', 'Informe um CNPJ válido de 8 dígitos (raiz) ou 14 dígitos (completo).');
-        return;
-      }
-
       load('mainLoad', 'searchBtn', 'Consultar', true);
       $('resultView').style.display = 'none';
+      $('nameMatchesSection').style.display = 'none';
 
       const root = d.slice(0, 8);
       let cnpjResult = null;
@@ -1313,6 +1327,99 @@
       load('mainLoad', 'searchBtn', 'Consultar', false);
     }
 
+    async function realizarConsulta(e) {
+      e.preventDefault();
+      err('mainErr', '');
+      
+      let rawVal = $('cnpjInput').value.trim();
+      if (!rawVal) {
+        err('mainErr', 'Informe um CNPJ ou o nome da empresa.');
+        return;
+      }
+
+      let d = dig(rawVal);
+      // Se contiver letras ou não contiver dígitos, assume-se busca por nome
+      const isCnpj = !/[a-zA-Z]/.test(rawVal) && d.length > 0;
+
+      if (isCnpj) {
+        if (d.length === 8) {
+          d = completarCnpjRaiz(d);
+          $('cnpjInput').value = cnpj(d);
+        } else if (d.length !== 14) {
+          err('mainErr', 'Informe um CNPJ válido de 8 dígitos (raiz) ou 14 dígitos (completo).');
+          return;
+        }
+        await consultarPorCnpj(d);
+      } else {
+        if (rawVal.length < 3) {
+          err('mainErr', 'Digite pelo menos 3 caracteres para buscar pelo nome.');
+          return;
+        }
+
+        load('mainLoad', 'searchBtn', 'Consultar', true);
+        $('resultView').style.display = 'none';
+        $('nameMatchesSection').style.display = 'none';
+
+        try {
+          await loadBcb();
+        } catch (ex) {
+          console.error("Falha ao carregar bases do BCB:", ex);
+        }
+
+        const queryNorm = norm(rawVal);
+        const matches = bcbState.all.filter(r => r.__searchStr.includes(queryNorm));
+
+        load('mainLoad', 'searchBtn', 'Consultar', false);
+
+        if (matches.length === 0) {
+          err('mainErr', 'Nenhuma instituição supervisionada foi encontrada com este nome nas bases do BCB.');
+          return;
+        }
+
+        if (matches.length === 1) {
+          let cnpjMatch = dig(first(matches[0], ['cnpj', 'documento']));
+          if (cnpjMatch) {
+            $('cnpjInput').value = cnpj(cnpjMatch);
+            await consultarPorCnpj(cnpjMatch);
+            return;
+          }
+        }
+
+        exibirTabelaDeSelecao(matches);
+      }
+    }
+
+    function exibirTabelaDeSelecao(matches) {
+      $('nameMatchesBody').innerHTML = matches.map(m => {
+        let nome = first(m, ['nome', 'razao', 'instituicao', 'denominacao']);
+        let doc = dig(first(m, ['cnpj', 'documento']));
+        let seg = first(m, ['segmento', 'tipo', 'classe']) || 'Não informado';
+        
+        return `
+          <tr>
+            <td><strong>${esc(nome)}</strong></td>
+            <td>${esc(cnpj(doc))}</td>
+            <td>${esc(seg)}</td>
+            <td><span class="chip">${esc(m.__base)}</span></td>
+            <td>
+              <button class="btn-accent" style="height: 30px; padding: 0 10px; font-size: 11px;" 
+                      type="button" onclick="selecionarDaLista('${esc(doc)}')">
+                Selecionar
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      $('nameMatchesSection').style.display = 'block';
+    }
+
+    window.selecionarDaLista = function(cnpjDigit) {
+      $('nameMatchesSection').style.display = 'none';
+      $('cnpjInput').value = cnpj(cnpjDigit);
+      consultarPorCnpj(cnpjDigit);
+    };
+
     // --- INITIALIZATION & EVENTS ---
     window.onload = () => {
       // Trigger Banco Central databases load immediately on start in background
@@ -1325,6 +1432,13 @@
     $('cnpjInput').oninput = e => {
       const input = e.target;
       const rawVal = input.value;
+      
+      // Se contiver letras, não tenta formatar como CNPJ dinamicamente
+      if (/[a-zA-Z]/.test(rawVal)) {
+        err('mainErr', '');
+        return;
+      }
+
       const selStart = input.selectionStart;
       const digitsBeforeCursor = rawVal.slice(0, selStart).replace(/\D/g, "").length;
       

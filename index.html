@@ -720,6 +720,11 @@
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -749,6 +754,7 @@
             <span id="statusTextEx">Aguardando inicialização</span>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -851,6 +857,29 @@
         <div id="exchangeContent"></div>
       </section>
 
+
+
+      <!-- Auditoria de Domínio Web (WHOIS/RDAP) -->
+      <section id="webAuditSection" class="section-card" style="display: none; margin-bottom: 24px; border-color: rgba(168, 85, 247, 0.25);">
+        <div class="section-header">
+          <div>
+            <h2>Auditoria de Domínio Web (WHOIS / RDAP)</h2>
+            <div class="section-subtitle">Dados cadastrais do site oficial registrado no Registro.br</div>
+          </div>
+          <div id="waHeaderBadge" class="bcb-header-badge" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.25); color: #c084fc;">🌐 Domínio</div>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--card-border); padding: 18px; border-radius: var(--radius-sm); margin-bottom: 20px; display: flex; gap: 12px; align-items: center;">
+          <div style="flex: 1;">
+            <label class="field-label" style="display: block; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Endereço do Domínio</label>
+            <input id="domainInput" type="text" class="search-input" style="width: 100%; height: 38px; padding: 0 12px; font-size: 14px; background: rgba(3, 7, 18, 0.8); border: 1px solid var(--card-border); border-radius: var(--radius-sm); color: var(--text-primary); outline: none;" placeholder="exemplo.com.br">
+          </div>
+          <button id="auditBtn" class="btn-accent" style="height: 38px; padding: 0 20px; font-size: 13px; margin-top: 19px;" type="button">Auditar Domínio</button>
+        </div>
+        
+        <div id="waContent"></div>
+      </section>
+
       <!-- Full Data JSON Explorer -->
       <section class="section-card">
         <div class="section-header">
@@ -872,6 +901,8 @@
         <div id="treeView" class="tree-box"></div>
       </section>
     </div>
+
+
   </main>
 
   <script>
@@ -19805,6 +19836,39 @@
     }
 
     // --- RENDERING ---
+    function normalizarDadosBrasilApi(b) {
+      return {
+        cnpj: b.cnpj,
+        razao_social: b.razao_social,
+        capital_social: b.capital_social,
+        estabelecimento: {
+          cnpj: b.cnpj,
+          nome_fantasia: b.nome_fantasia || b.razao_social,
+          situacao_cadastral: b.descricao_situacao_cadastral || "ATIVA",
+          tipo_logradouro: b.descricao_tipo_de_logradouro || "",
+          logradouro: b.logradouro || "",
+          numero: b.numero || "",
+          complemento: b.complemento || "",
+          bairro: b.bairro || "",
+          cep: b.cep || "",
+          cidade: {
+            nome: b.municipio || ""
+          },
+          estado: {
+            sigla: b.uf || ""
+          },
+          atividade_principal: {
+            id: b.cnae_fiscal || "",
+            descricao: b.cnae_fiscal_descricao || ""
+          },
+          ddd1: b.ddd_telefone_1 ? b.ddd_telefone_1.slice(0, 2) : "",
+          telefone1: b.ddd_telefone_1 ? b.ddd_telefone_1.slice(2) : "",
+          email: b.email || ""
+        },
+        inscricoes_estaduais: []
+      };
+    }
+
     function resumoCnpj(j) {
       let e = j.estabelecimento || {};
       let end = [e.tipo_logradouro, e.logradouro, e.numero, e.complemento, e.bairro, cep(e.cep)].filter(x => x && x !== "Não informado").join(", ");
@@ -20119,19 +20183,37 @@
       $('resultView').style.display = 'none';
       $('nameMatchesSection').style.display = 'none';
 
+      // Se d for 8 dígitos (CNPJ Raiz), autocompleta para 14 antes de fazer as consultas nas APIs
+      if (d && d.length === 8) {
+        d = completarCnpjRaiz(d);
+        $('cnpjInput').value = cnpj(d);
+      }
+
       const root = d.slice(0, 8);
       let cnpjResult = null;
       let cnpjError = null;
 
-      // 1. Start CNPJ WS Fetch
+      // 1. Start CNPJ WS Fetch with fallback to BrasilAPI
       const fetchCnpjPromise = fetch(`https://publica.cnpj.ws/cnpj/${d}`)
         .then(async r => {
           if (!r.ok) {
-            if (r.status === 404) throw new Error('CNPJ não encontrado na base de dados da Receita Federal.');
-            if (r.status === 429) throw new Error('Limite de requisições atingido. Por favor, aguarde alguns instantes e tente novamente.');
-            throw new Error(`Código HTTP ${r.status}.`);
+            throw new Error(`CNPJ.ws respondeu com erro ${r.status}`);
           }
           return await r.json();
+        })
+        .catch(async () => {
+          console.warn("API pública CNPJ.ws falhou (ou limite atingido). Tentando fallback BrasilAPI...");
+          try {
+            const r2 = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${d}`);
+            if (!r2.ok) {
+              if (r2.status === 404) throw new Error('CNPJ não encontrado na base de dados da Receita Federal.');
+              throw new Error(`BrasilAPI respondeu com erro ${r2.status}`);
+            }
+            const rawData = await r2.json();
+            return normalizarDadosBrasilApi(rawData);
+          } catch (err2) {
+            throw new Error(`Falha nas consultas primária e secundária. Receita Federal indisponível.`);
+          }
         })
         .then(data => { cnpjResult = data; })
         .catch(err => { cnpjError = err.message; });
@@ -20156,7 +20238,7 @@
         return doc.includes(root); // matches the root CNPJ
       });
 
-      // 4. Wait for CNPJ WS to resolve
+      // 4. Wait for CNPJ WS/BrasilAPI to resolve
       await fetchCnpjPromise;
 
       // Check if both failed
@@ -20172,6 +20254,24 @@
       // Reveal UI
       $('resultView').style.display = 'block';
       load('mainLoad', 'searchBtn', 'Consultar', false);
+
+      // Trigger automatic WHOIS/RDAP audit if email is available
+      $('webAuditSection').style.display = 'block';
+      $('waContent').innerHTML = '';
+      $('domainInput').value = '';
+      
+      let emailParaAudit = cnpjResult?.estabelecimento?.email;
+      let dom = extrairDominioDeEmail(emailParaAudit);
+      if (dom) {
+        $('domainInput').value = dom;
+        auditarDominioWeb(dom, d);
+      } else {
+        $('waContent').innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 18px; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 13px;">
+            Digite o domínio da empresa no campo acima (ex: <code>exemplo.com.br</code>) e clique em <strong>Auditar Domínio</strong> para verificar a propriedade do site.
+          </div>
+        `;
+      }
     }
 
     async function realizarConsulta(e) {
@@ -20320,6 +20420,203 @@
       consultarPorCnpj(cnpjDigit);
     };
 
+
+
+
+
+    // --- DOMAIN AUDIT LOGIC (WHOIS / RDAP) ---
+    function extrairDominioDeEmail(email) {
+      if (!email || !email.includes('@')) return '';
+      const domain = email.split('@')[1].trim().toLowerCase();
+      const genericProviders = ['gmail.com', 'hotmail.com', 'yahoo.com', 'outlook.com', 'bol.com.br', 'uol.com.br', 'terra.com.br', 'ig.com.br', 'outlook.com.br', 'yahoo.com.br'];
+      if (genericProviders.includes(domain)) return '';
+      return domain;
+    }
+
+    async function fetchDomainRDAP(domain) {
+      const url = `https://rdap.registro.br/domain/${domain}`;
+      try {
+        const res = await fetch(url);
+        if (res.ok) return await res.json();
+        throw new Error(`Erro HTTP ${res.status}`);
+      } catch (e) {
+        console.warn("Fetch direto para rdap.registro.br falhou (CORS). Tentando proxy allorigins...", e);
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        const resProxy = await fetch(proxyUrl);
+        if (!resProxy.ok) {
+          throw new Error("Não foi possível acessar o registro de domínios (serviço indisponível).");
+        }
+        const jsonProxy = await resProxy.json();
+        return JSON.parse(jsonProxy.contents);
+      }
+    }
+
+    async function auditarDominioWeb(domain, cnpjInvestigado) {
+      if (!domain) return;
+      domain = domain.trim().toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '');
+      if (!domain.includes('.')) {
+        $('waContent').innerHTML = `
+          <div style="background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.15); padding: 14px; border-radius: var(--radius-sm); color: var(--red-accent); font-size: 13px;">
+            Erro: Formato de domínio inválido. Insira um domínio válido (ex: <code>nome.com.br</code>).
+          </div>
+        `;
+        return;
+      }
+
+      $('waContent').innerHTML = `
+        <div style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">
+          <span style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">⏳</span>
+          Consultando dados de registro no Registro.br...
+        </div>
+      `;
+
+      try {
+        const data = await fetchDomainRDAP(domain);
+        
+        if (!data || data.error || (data.status && data.status >= 400)) {
+          throw new Error(data.message || 'Domínio não localizado ou indisponível.');
+        }
+
+        const registrant = (data.entities || []).find(e => e.roles && e.roles.includes('registrant'));
+        let ownerName = 'Não informado';
+        let ownerDoc = 'Não informado';
+        let ownerDocType = '';
+
+        if (registrant) {
+          if (registrant.vcardArray && registrant.vcardArray[1]) {
+            const fnProp = registrant.vcardArray[1].find(prop => prop[0] === 'fn');
+            if (fnProp) ownerName = fnProp[3];
+          }
+          if (registrant.publicIds) {
+            const pubId = registrant.publicIds.find(p => p.type === 'cnpj' || p.type === 'cpf');
+            if (pubId) {
+              ownerDoc = pubId.identifier;
+              ownerDocType = pubId.type.toUpperCase();
+            }
+          }
+        }
+
+        let creationDate = 'Não informada';
+        let expirationDate = 'Não informada';
+        if (data.events) {
+          const regEvent = data.events.find(e => e.eventAction === 'registration');
+          if (regEvent) creationDate = new Date(regEvent.eventDate).toLocaleDateString('pt-BR');
+          const expEvent = data.events.find(e => e.eventAction === 'expiration');
+          if (expEvent) expirationDate = new Date(expEvent.eventDate).toLocaleDateString('pt-BR');
+        }
+
+        let nsList = [];
+        if (data.nameservers) {
+          nsList = data.nameservers.map(ns => ns.ldhName).filter(Boolean);
+        }
+        const dnsStr = nsList.length > 0 ? nsList.join(', ') : 'Não informado';
+
+        const docOwnerClean = dig(ownerDoc);
+        const docInvestigatedClean = dig(cnpjInvestigado);
+        
+        let matchResult = false;
+        let matchHtml = '';
+
+        if (docOwnerClean && docInvestigatedClean) {
+          matchResult = docOwnerClean.slice(0, 8) === docInvestigatedClean.slice(0, 8);
+        }
+
+        if (ownerDoc === 'Não informado') {
+          matchHtml = `
+            <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); padding: 14px; border-radius: var(--radius-sm);">
+              <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: #f59e0b;">
+                ⚠️ INFORMAÇÃO OCULTA OU INDISPONÍVEL
+              </div>
+              <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">
+                Não foi possível extrair o CPF/CNPJ do titular do domínio através do RDAP. Isso pode ocorrer para domínios de pessoas físicas protegidos pela LGPD ou domínios internacionais.
+              </div>
+            </div>
+          `;
+        } else if (matchResult) {
+          matchHtml = `
+            <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.08); padding: 14px; border-radius: var(--radius-sm);">
+              <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--green-accent);">
+                ✅ PROPRIEDADE CORRESPONDENTE
+              </div>
+              <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">
+                O domínio <strong>${esc(domain)}</strong> está registrado oficialmente sob a mesma titularidade ou grupo econômico da empresa pesquisada (CNPJ base correspondente: <strong>${esc(ownerDoc)}</strong>).
+              </div>
+            </div>
+          `;
+        } else {
+          matchHtml = `
+            <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(248, 113, 113, 0.35); background: rgba(248, 113, 113, 0.08); padding: 14px; border-radius: var(--radius-sm);">
+              <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--red-accent);">
+                🚨 RED FLAG: DIVERGÊNCIA DE PROPRIEDADE (POSSÍVEL LARANJA)
+              </div>
+              <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">
+                O domínio <strong>${esc(domain)}</strong> está registrado sob um documento diferente (<strong>${esc(ownerDoc)}</strong> - ${esc(ownerName)}) do CNPJ investigado (<strong>${esc(cnpj(cnpjInvestigado))}</strong>). Isso indica que a infraestrutura web da Exchange está sob posse de terceiros ou laranjas.
+              </div>
+            </div>
+          `;
+        }
+
+        const fields = [
+          ['Domínio Auditado', domain, true],
+          ['Titular Registrado', ownerName, true],
+          ['Documento Titular', ownerDocType ? `${ownerDoc} (${ownerDocType})` : ownerDoc, false],
+          ['Data de Criação', creationDate, false],
+          ['Data de Expiração', expirationDate, false],
+          ['Servidores DNS', dnsStr, true]
+        ];
+
+        $('waContent').innerHTML = `
+          ${matchHtml}
+          <div class="fields-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            ${fields.map(f => `
+              <div class="field-box ${f[2] ? 'wide' : ''}" style="background: rgba(168, 85, 247, 0.01); border-color: rgba(168, 85, 247, 0.08);">
+                <div class="field-label" style="color: #c084fc; font-weight:700;">${esc(f[0])}</div>
+                <div class="field-value">${esc(f[1])}</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      } catch (error) {
+        console.error("Erro ao auditar domínio:", error);
+        $('waContent').innerHTML = `
+          <div style="background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.15); padding: 18px; border-radius: var(--radius-sm); color: var(--red-accent); font-size: 13px;">
+            <strong>Erro na Auditoria Web:</strong> ${esc(error.message || 'Não foi possível completar a consulta de domínio.')}<br>
+            <span style="font-size: 11px; margin-top: 6px; display: block; color: var(--text-secondary);">Verifique se o domínio existe e se termina com <code>.br</code> (a consulta oficial suporta domínios sob a extensão nacional).</span>
+          </div>
+        `;
+      }
+    }
+
+    function getActiveCnpj() {
+      if ($('resultView').style.display === 'block') {
+        const boxes = document.querySelectorAll('#cnpjFields .field-box');
+        for (let box of boxes) {
+          const label = box.querySelector('.field-label');
+          if (label && label.textContent.includes('CNPJ')) {
+            const val = box.querySelector('.field-value');
+            if (val && val.textContent) {
+              return dig(val.textContent);
+            }
+          }
+        }
+        if (searchState.cnpjData && searchState.cnpjData.cnpj) {
+          return dig(searchState.cnpjData.cnpj);
+        }
+      }
+      return null;
+    }
+
+    $('auditBtn').addEventListener('click', () => {
+      const dom = $('domainInput').value.trim();
+      const activeCnpj = getActiveCnpj();
+      if (dom && activeCnpj) {
+        auditarDominioWeb(dom, activeCnpj);
+      } else if (!dom) {
+        alert('Por favor, informe o domínio.');
+      } else {
+        alert('Realize uma consulta de CNPJ primeiro para efetuar a auditoria comparativa.');
+      }
+    });
     // --- INITIALIZATION & EVENTS ---
     window.onload = () => {
       // Trigger Banco Central databases load immediately on start in background

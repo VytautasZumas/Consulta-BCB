@@ -11,30 +11,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #030712;
-      --bg-gradient: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.12), transparent 50%), 
-                     radial-gradient(circle at 0% 100%, rgba(99, 102, 241, 0.06), transparent 45%), 
-                     #030712;
-      --card-bg: rgba(17, 24, 39, 0.55);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-focus: rgba(34, 211, 238, 0.4);
-      --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-      --text-primary: #f9fafb;
-      --text-secondary: #9ca3af;
-      --text-muted: #6b7280;
+      --bg-dark: #060d1a;
+      --bg-gradient: radial-gradient(ellipse at 60% 0%, rgba(6, 182, 212, 0.05), transparent 55%),
+                     radial-gradient(ellipse at 0% 100%, rgba(99, 102, 241, 0.04), transparent 50%),
+                     #060d1a;
+      --card-bg: rgba(15, 22, 36, 0.7);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-border-focus: rgba(34, 211, 238, 0.35);
+      --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
       --cyan-accent: #22d3ee;
-      --cyan-glow: rgba(34, 211, 238, 0.15);
+      --cyan-glow: rgba(34, 211, 238, 0.10);
       --green-accent: #34d399;
-      --green-glow: rgba(52, 211, 153, 0.12);
+      --green-glow: rgba(52, 211, 153, 0.08);
       --red-accent: #f87171;
-      --red-glow: rgba(248, 113, 113, 0.12);
-      --radius-lg: 24px;
-      --radius-md: 16px;
-      --radius-sm: 10px;
+      --red-glow: rgba(248, 113, 113, 0.08);
+      --amber-accent: #f59e0b;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
       --font-title: 'Outfit', sans-serif;
       --font-body: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -96,34 +97,34 @@
 
     .badge-eyebrow {
       display: inline-flex;
-      background: rgba(34, 211, 238, 0.1);
-      border: 1px solid rgba(34, 211, 238, 0.25);
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 211, 238, 0.06);
+      border: 1px solid rgba(34, 211, 238, 0.18);
       color: var(--cyan-accent);
-      padding: 4px 12px;
-      border-radius: 99px;
+      padding: 3px 10px;
+      border-radius: 6px;
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
     }
 
     h1 {
       font-family: var(--font-title);
-      font-size: clamp(24px, 4vw, 38px);
+      font-size: clamp(22px, 3.5vw, 34px);
       line-height: 1.15;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #ffffff, #a5f3fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.01em;
+      color: #f1f5f9;
     }
 
     .hero-desc {
       color: var(--text-secondary);
-      font-size: 15px;
-      margin-top: 8px;
-      max-width: 600px;
+      font-size: 14px;
+      margin-top: 6px;
+      max-width: 560px;
+      line-height: 1.6;
     }
 
     .status-panel {
@@ -160,18 +161,18 @@
 
     .status-dot.active {
       background: var(--green-accent);
-      box-shadow: 0 0 10px var(--green-accent);
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
     }
 
     .status-dot.loading {
       background: var(--cyan-accent);
-      box-shadow: 0 0 10px var(--cyan-accent);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
       animation: pulse 1.5s infinite;
     }
 
     .status-dot.warning {
-      background: #f59e0b;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+      background: var(--amber-accent);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
     }
 
     /* --- SEARCH BAR --- */
@@ -188,12 +189,11 @@
     .search-label {
       display: block;
       font-family: var(--font-title);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-secondary);
-      margin-bottom: 10px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
     }
 
     .search-row {
@@ -216,30 +216,31 @@
     }
 
     .search-input:focus {
-      border-color: var(--cyan-accent);
-      box-shadow: 0 0 0 4px var(--cyan-glow);
+      border-color: rgba(34, 211, 238, 0.5);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.08);
     }
 
     .search-btn {
       height: 54px;
-      padding: 0 30px;
+      padding: 0 28px;
       background: var(--cyan-accent);
-      color: #083344;
+      color: #0c2233;
       border: 0;
       border-radius: var(--radius-sm);
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
+      letter-spacing: 0.02em;
     }
 
     .search-btn:hover:not(:disabled) {
-      filter: brightness(1.1);
-      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+      background: #38e0f8;
+      box-shadow: 0 2px 12px rgba(34, 211, 238, 0.25);
     }
 
     .search-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.55;
       cursor: not-allowed;
     }
 
@@ -340,18 +341,19 @@
     .card-label {
       font-family: var(--font-title);
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--text-secondary);
+      color: var(--text-muted);
     }
 
     .card-value {
-      font-size: 18px;
-      font-weight: 800;
-      color: #ffffff;
-      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-top: 6px;
       overflow-wrap: anywhere;
+      line-height: 1.4;
     }
 
     .badge-status {
@@ -396,9 +398,10 @@
 
     h2 {
       font-family: var(--font-title);
-      font-size: 22px;
-      font-weight: 700;
-      color: #ffffff;
+      font-size: 17px;
+      font-weight: 600;
+      color: #f1f5f9;
+      letter-spacing: -0.01em;
     }
 
     .section-subtitle {
@@ -472,17 +475,17 @@
 
     .field-label {
       font-family: var(--font-title);
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 600;
       color: var(--text-muted);
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .field-value {
-      font-size: 14px;
-      color: #e5e7eb;
-      margin-top: 6px;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 5px;
       line-height: 1.5;
       overflow-wrap: anywhere;
     }
@@ -537,16 +540,20 @@
     }
 
     th {
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-secondary);
-      padding: 12px 16px;
+      background: rgba(8, 14, 28, 0.9);
+      color: var(--text-muted);
+      padding: 10px 14px;
+      font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
       border-bottom: 1px solid var(--card-border);
     }
 
     td {
-      padding: 12px 16px;
-      color: #d1d5db;
+      padding: 11px 14px;
+      font-size: 13px;
+      color: #cbd5e1;
       border-bottom: 1px solid var(--card-border);
     }
 
@@ -616,7 +623,7 @@
       background: rgba(255, 255, 255, 0.05);
       color: var(--cyan-accent);
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 700;
       transition: var(--transition);
     }
 
@@ -716,13 +723,144 @@
       }
     }
 
+    /* --- INSTITUTIONAL BAR --- */
+    .inst-bar {
+      background: rgba(8, 14, 28, 0.95);
+      border-bottom: 1px solid rgba(34, 211, 238, 0.12);
+      padding: 7px 0;
+    }
+    .inst-bar-inner {
+      width: min(1140px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .inst-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+    .inst-bar-left svg { opacity: 0.6; flex-shrink: 0; }
+    .inst-bar-sep {
+      width: 1px;
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+    }
+    .inst-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber-accent);
+      opacity: 0.85;
+    }
+    .inst-bar-right svg { flex-shrink: 0; }
+
+    /* --- FOOTER --- */
+    .app-footer {
+      border-top: 1px solid var(--card-border);
+      margin-top: 48px;
+      padding: 24px 0 40px;
+    }
+    .app-footer-inner {
+      width: min(1140px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-brand {
+      font-family: var(--font-title);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .footer-brand span {
+      color: var(--cyan-accent);
+    }
+    .footer-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .footer-badge {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* --- PRINT --- */
+    .print-btn {
+      height: 38px;
+      padding: 0 16px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .print-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+    }
+    @media print {
+      .inst-bar, .search-section, #mainErr, #mainLoad,
+      #nameMatchesSection, .action-group, .print-btn,
+      .app-footer, .chips, .status-panel { display: none !important; }
+      body { background: #ffffff; color: #111; }
+      .hero-header { border: none; box-shadow: none; padding: 0 0 16px; backdrop-filter: none; }
+      h1 { color: #111 !important; font-size: 22px; }
+      .badge-eyebrow { border-color: #ccc; color: #444; background: #f5f5f5; }
+      .hero-desc { color: #444; }
+      .section-card, .summary-card { border: 1px solid #ddd; box-shadow: none; backdrop-filter: none; background: #fff; break-inside: avoid; }
+      .section-header { border-color: #ddd; }
+      h2 { color: #111; }
+      .field-label { color: #666; }
+      .field-value { color: #111; }
+      th { background: #f5f5f5; color: #444; }
+      td { color: #222; border-color: #ddd; }
+      .result-view { display: block !important; }
+    }
+
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      50% { opacity: 0.4; }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -733,6 +871,24 @@
   </style>
 </head>
 <body>
+  <!-- Barra institucional -->
+  <div class="inst-bar">
+    <div class="inst-bar-inner">
+      <div class="inst-bar-left">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Polícia Civil do Estado de Goiás
+        <div class="inst-bar-sep"></div>
+        LAB-LD · Laboratório de Tecnologia contra Lavagem de Dinheiro
+        <div class="inst-bar-sep"></div>
+        PEQUI v2.0
+      </div>
+      <div class="inst-bar-right">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Uso Restrito
+      </div>
+    </div>
+  </div>
+
   <main>
     <!-- Brand / Hero -->
     <section class="hero-header">
@@ -758,6 +914,19 @@
             <div id="statusDotEx" class="status-dot"></div>
             <span id="statusTextEx">Aguardando inicialização</span>
           </div>
+        </div>
+        <div style="border-top: 1px solid var(--card-border); padding-top: 8px; margin-top: 4px;">
+          <div class="status-title" style="margin-bottom: 6px;">Portal da Transparência</div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <input id="ptApiKeyInput" type="password"
+              style="flex:1; height:28px; background:rgba(3,7,18,0.8); border:1px solid var(--card-border); border-radius:6px; color:var(--text-primary); padding:0 8px; font-size:11px; outline:none;"
+              placeholder="Cole sua chave aqui">
+            <button id="ptApiKeySaveBtn" type="button"
+              style="height:28px; padding:0 10px; font-size:11px; font-weight:700; background:var(--cyan-glow); color:var(--cyan-accent); border:1px solid rgba(34,211,238,0.25); border-radius:6px; cursor:pointer; white-space:nowrap;">
+              Salvar
+            </button>
+          </div>
+          <div id="ptApiKeyStatus" style="font-size:10px; margin-top:5px; color:var(--text-muted);">Não configurada</div>
         </div>
 
       </div>
@@ -844,7 +1013,10 @@
               <h2>Supervisão Banco Central</h2>
               <div class="section-subtitle">Status de autorizações e bases OData</div>
             </div>
-            <div id="bcbHeaderBadge" class="bcb-header-badge" style="display: none;">🛡️ Supervisionado</div>
+            <div id="bcbHeaderBadge" class="bcb-header-badge" style="display: none;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Supervisionado
+            </div>
           </div>
           <div id="bcbContent"></div>
         </section>
@@ -857,12 +1029,30 @@
             <h2>Vínculos de Exchange (Planilha Local)</h2>
             <div class="section-subtitle">Dados de relacionamento societário e investigações associados a este CNPJ</div>
           </div>
-          <div id="exchangeHeaderBadge" class="bcb-header-badge" style="background: rgba(34, 211, 238, 0.1); border-color: rgba(34, 211, 238, 0.25); color: var(--cyan-accent); display: inline-flex;">🪙 Exchange Registrada</div>
+          <div id="exchangeHeaderBadge" class="bcb-header-badge" style="background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.2); color: var(--cyan-accent); display: inline-flex;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+            Exchange Registrada
+          </div>
         </div>
         <div id="exchangeContent"></div>
       </section>
 
 
+
+      <!-- PEP & Sanções Federais (Portal da Transparência) -->
+      <section id="sancaoSection" class="section-card" style="display: none; margin-bottom: 24px; border-color: rgba(248, 113, 113, 0.25);">
+        <div class="section-header">
+          <div>
+            <h2>Alertas: PEP &amp; Sanções Federais</h2>
+            <div class="section-subtitle">Portal da Transparência — CEIS, CNEP e Pessoas Politicamente Expostas</div>
+          </div>
+          <div class="bcb-header-badge" style="background: rgba(248,113,113,0.06); border-color: rgba(248,113,113,0.22); color: var(--red-accent);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Inteligência Federal
+          </div>
+        </div>
+        <div id="sancaoContent"></div>
+      </section>
 
       <!-- Auditoria de Domínio Web (WHOIS/RDAP) -->
       <section id="webAuditSection" class="section-card" style="display: none; margin-bottom: 24px; border-color: rgba(168, 85, 247, 0.25);">
@@ -871,7 +1061,10 @@
             <h2>Auditoria de Domínio Web (WHOIS / RDAP)</h2>
             <div class="section-subtitle">Dados cadastrais do site oficial registrado no Registro.br</div>
           </div>
-          <div id="waHeaderBadge" class="bcb-header-badge" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.25); color: #c084fc;">🌐 Domínio</div>
+          <div id="waHeaderBadge" class="bcb-header-badge" style="background: rgba(168,85,247,0.06); border-color: rgba(168,85,247,0.2); color: #c084fc;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Domínio
+          </div>
         </div>
         
         <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--card-border); padding: 18px; border-radius: var(--radius-sm); margin-bottom: 20px; display: flex; gap: 12px; align-items: center;">
@@ -893,7 +1086,11 @@
             <div class="section-subtitle">Retorno completo em estrutura de dados recursiva</div>
           </div>
           <div class="action-group">
-            <button id="rawBtn" class="btn-secondary" type="button">Ver JSON Bruto</button>
+            <button class="print-btn" type="button" onclick="window.print()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Imprimir
+            </button>
+            <button id="rawBtn" class="btn-secondary" type="button">Ver JSON</button>
             <button id="copyBtn" class="btn-accent" type="button">Copiar JSON</button>
           </div>
         </div>
@@ -909,6 +1106,28 @@
 
 
   </main>
+
+  <!-- Footer institucional -->
+  <footer class="app-footer">
+    <div class="app-footer-inner">
+      <div class="footer-row">
+        <div class="footer-brand">
+          <span>PEQUI</span> · Plataforma de Exchanges e Quadro societário para Unificação de Inteligência financeira
+        </div>
+        <div class="footer-badges">
+          <span class="footer-badge">PCGO · LAB-LD</span>
+          <span class="footer-badge">Uso Restrito</span>
+          <span class="footer-badge">Dados Oficiais</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        As informações exibidas são obtidas de fontes públicas (Receita Federal, Banco Central, Portal da Transparência, Registro.br) e de base de dados interna.
+        O uso desta plataforma é restrito a agentes autorizados da Polícia Civil do Estado de Goiás.
+        Tratamento de dados pessoais em conformidade com a LGPD (Lei nº 13.709/2018).
+      </div>
+    </div>
+  </footer>
+
 
   <script>
 const EXCHANGES_DATA = [
@@ -19776,9 +19995,24 @@ const EXCHANGES_DATA = [
 
     // --- DATA LOADING (BANCO CENTRAL) ---
     async function fetchDs(ds) {
-      let r = await fetch(ds.url);
-      if (!r.ok) throw new Error(`Falha ao consultar ${ds.label}. Código HTTP ${r.status}.`);
-      let j = await r.json();
+      let j = null;
+
+      // 1ª tentativa: fetch direto
+      try {
+        const r = await fetch(ds.url);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        j = await r.json();
+      } catch (e) {
+        if (!(e instanceof TypeError) && !e.message.includes('CORS') && !e.message.includes('fetch')) throw e;
+        // 2ª tentativa: proxy allorigins (necessário quando aberto como file://)
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(ds.url)}`;
+        const rp = await fetch(proxyUrl);
+        if (!rp.ok) throw new Error(`Falha ao consultar ${ds.label} (proxy HTTP ${rp.status}).`);
+        const jp = await rp.json();
+        if (!jp.contents) throw new Error(`Falha ao consultar ${ds.label}: resposta vazia do proxy.`);
+        j = JSON.parse(jp.contents);
+      }
+
       return (Array.isArray(j.value) ? j.value : []).map(x => {
         let txt = text(x);
         return { ...x, __base: ds.label, __base_id: ds.id, __searchStr: txt };
@@ -19800,30 +20034,46 @@ const EXCHANGES_DATA = [
         let all = [];
         let failed = [];
 
+        const failedDetails = [];
         results.forEach((res, i) => {
           if (res.status === 'fulfilled') {
             all.push(res.value);
           } else {
             failed.push(DATASETS[i].label);
+            failedDetails.push(`${DATASETS[i].label}: ${res.reason?.message || res.reason}`);
             console.error(`Erro ao carregar base ${DATASETS[i].label}:`, res.reason);
           }
         });
 
         bcbState.all = all.flat();
         bcbState.loaded = true;
-        
-        if (failed.length > 0) {
+
+        if (all.length === 0 && failed.length > 0) {
+          // Todas as bases falharam
           dot.className = "status-dot warning";
-          txt.textContent = `Carregado parcialmente (${bcbState.all.length.toLocaleString('pt-BR')} registros)`;
-          err('mainErr', `Aviso: Algumas bases do Banco Central falharam no carregamento: ${failed.join(', ')}. Os dados de supervisão do BCB podem estar incompletos.`);
+          txt.textContent = `Falha ao carregar (0 registros)`;
+          err('mainErr', `
+            <strong>⚠️ Bases do Banco Central não carregaram.</strong><br>
+            Motivo(s):<br>
+            <ul style="margin: 6px 0 0 16px; font-size:13px;">
+              ${failedDetails.map(d => `<li>${esc(d)}</li>`).join('')}
+            </ul>
+            <span style="font-size:12px; margin-top:8px; display:block; color:var(--text-secondary);">
+              Verifique sua conexão com a internet. Se o problema persistir, o serviço do Banco Central pode estar temporariamente indisponível.
+            </span>`);
+        } else if (failed.length > 0) {
+          dot.className = "status-dot warning";
+          txt.textContent = `Parcial (${bcbState.all.length.toLocaleString('pt-BR')} registros)`;
+          err('mainErr', `Aviso: ${failed.length} base(s) do BCB não carregaram: ${failed.join(', ')}. Dados podem estar incompletos.`);
         } else {
           dot.className = "status-dot active";
           txt.textContent = `Integrado (${bcbState.all.length.toLocaleString('pt-BR')} registros)`;
         }
       } catch (ex) {
-        dot.className = "status-dot";
+        dot.className = "status-dot warning";
         txt.textContent = "Falha ao carregar bases";
         console.error("Erro crítico ao carregar Banco Central:", ex);
+        err('mainErr', `Erro crítico ao carregar bases do Banco Central: ${esc(ex.message)}`);
       } finally {
         bcbState.loading = false;
       }
@@ -20263,6 +20513,9 @@ const EXCHANGES_DATA = [
       $('resultView').style.display = 'block';
       load('mainLoad', 'searchBtn', 'Consultar', false);
 
+      // Trigger PEP & Sanctions check
+      renderAlertasSancoes(d, exchangeMatches);
+
       // Trigger automatic WHOIS/RDAP audit if email is available
       $('webAuditSection').style.display = 'block';
       $('waContent').innerHTML = '';
@@ -20432,6 +20685,213 @@ const EXCHANGES_DATA = [
 
 
 
+    // --- PORTAL DA TRANSPARÊNCIA: PEP & SANÇÕES ---
+
+    const PT_BASE = 'https://api.portaldatransparencia.gov.br/api-de-dados';
+
+    function getPtKey() { return localStorage.getItem('ptApiKey') || ''; }
+
+    function initPtKeyUi() {
+      const saved = getPtKey();
+      if (saved) {
+        $('ptApiKeyInput').value = saved;
+        $('ptApiKeyStatus').textContent = '✓ Configurada';
+        $('ptApiKeyStatus').style.color = 'var(--green-accent)';
+      }
+      $('ptApiKeySaveBtn').addEventListener('click', () => {
+        const v = $('ptApiKeyInput').value.trim();
+        if (!v) return;
+        localStorage.setItem('ptApiKey', v);
+        $('ptApiKeyStatus').textContent = '✓ Salva com sucesso';
+        $('ptApiKeyStatus').style.color = 'var(--green-accent)';
+      });
+    }
+
+    async function fetchPT(path, params) {
+      const key = getPtKey();
+      if (!key) throw new Error('no-key');
+      const qs = new URLSearchParams({ ...params, pagina: 1 }).toString();
+      const directUrl = `${PT_BASE}${path}?${qs}`;
+
+      // 1ª tentativa: fetch direto com header (funciona quando servido por HTTP)
+      try {
+        const res = await fetch(directUrl, {
+          headers: { 'chave-api-de-dados': key, 'Accept': 'application/json' }
+        });
+        if (res.status === 404 || res.status === 204) return [];
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const j = await res.json();
+        return Array.isArray(j) ? j : [];
+      } catch (e) {
+        // Se não for erro de rede/CORS, propaga diretamente
+        if (!(e instanceof TypeError)) throw e;
+      }
+
+      // 2ª tentativa: proxy allorigins com chave como query param
+      // (file:// bloqueia headers customizados no preflight — a API aceita a chave também por QS)
+      const urlComChave = `${directUrl}&chave-api-de-dados=${encodeURIComponent(key)}`;
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlComChave)}`;
+      const resProxy = await fetch(proxyUrl);
+      if (!resProxy.ok) throw new Error(`Proxy indisponível (HTTP ${resProxy.status})`);
+      const json = await resProxy.json();
+      if (!json.contents) return [];
+      const parsed = JSON.parse(json.contents);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+
+    async function renderAlertasSancoes(cnpjPrincipal, exchangeMatches) {
+      const section = $('sancaoSection');
+      const content = $('sancaoContent');
+      section.style.display = 'block';
+
+      if (!getPtKey()) {
+        content.innerHTML = `
+          <div style="background:rgba(245,158,11,0.05); border:1px solid rgba(245,158,11,0.2); border-radius:var(--radius-sm); padding:16px; font-size:13px; color:#f59e0b;">
+            <strong>⚠️ Chave não configurada.</strong> Insira sua chave gratuita do
+            <a href="https://portaldatransparencia.gov.br/api-de-dados/cadastrar-email" target="_blank"
+               style="color:var(--cyan-accent);">Portal da Transparência</a>
+            no painel de status acima para habilitar a verificação de PEP, CEIS e CNEP.
+          </div>`;
+        return;
+      }
+
+      content.innerHTML = `
+        <div style="padding:20px; text-align:center; color:var(--text-secondary); font-size:13px;">
+          <span style="display:inline-block; animation:spin 1s linear infinite; margin-right:8px;">⏳</span>
+          Consultando Portal da Transparência…
+        </div>`;
+
+      // Documentos únicos a consultar: CNPJ principal + sócios das exchanges
+      const docsMap = new Map(); // doc_digits -> { nome, tipo: 'cpf'|'cnpj' }
+      const rootCnpj = dig(cnpjPrincipal || '');
+      if (rootCnpj.length >= 14) docsMap.set(rootCnpj, { nome: 'Empresa investigada', tipo: 'cnpj' });
+
+      for (const m of exchangeMatches) {
+        const d = dig(m.documento_responsavel || '');
+        if (!d || docsMap.has(d)) continue;
+        const tipo = d.length <= 11 ? 'cpf' : 'cnpj';
+        docsMap.set(d, { nome: m.nome_responsavel || d, tipo });
+        if (docsMap.size >= 20) break; // limite para não sobrecarregar a API
+      }
+
+      // Dispara todas as consultas em paralelo por documento
+      const tasks = [...docsMap.entries()].map(async ([doc, meta]) => {
+        const queries = [
+          fetchPT('/ceis', { cnpjSancionado: doc }).catch(() => []),
+          fetchPT('/cnep', { cnpjSancionado: doc }).catch(() => [])
+        ];
+        if (meta.tipo === 'cpf') {
+          queries.push(fetchPT('/pep', { cpfCnpj: doc }).catch(() => []));
+        } else {
+          queries.push(Promise.resolve([]));
+        }
+        const [ceis, cnep, pep] = await Promise.all(queries);
+        return { doc, ...meta, ceis, cnep, pep };
+      });
+
+      let results;
+      try {
+        results = await Promise.all(tasks);
+      } catch (e) {
+        content.innerHTML = `
+          <div style="background:rgba(248,113,113,0.05); border:1px solid rgba(248,113,113,0.15); border-radius:var(--radius-sm); padding:16px; font-size:13px; color:var(--red-accent);">
+            <strong>Erro ao consultar o Portal da Transparência:</strong> ${esc(e.message)}<br>
+            <span style="font-size:11px; color:var(--text-muted); margin-top:4px; display:block;">
+              Verifique se a chave é válida ou se o serviço está disponível.
+            </span>
+          </div>`;
+        return;
+      }
+
+      // Separa hits dos sem ocorrência
+      const comAlerta = results.filter(r => r.ceis.length || r.cnep.length || r.pep.length);
+      const semAlerta = results.filter(r => !r.ceis.length && !r.cnep.length && !r.pep.length);
+
+      if (!comAlerta.length) {
+        content.innerHTML = `
+          <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.15); border-radius:var(--radius-sm); padding:16px; font-size:13px; color:var(--green-accent);">
+            ✅ Nenhum registro encontrado nas bases CEIS, CNEP ou PEP para os ${results.length} documento(s) verificado(s).
+          </div>`;
+        return;
+      }
+
+      // Renderiza cards de alerta por documento
+      const alertHtml = comAlerta.map(r => {
+        const tags = [
+          r.pep.length  && `<span style="background:rgba(248,113,113,0.12); color:var(--red-accent); border:1px solid rgba(248,113,113,0.3); border-radius:99px; padding:2px 10px; font-size:11px; font-weight:700;">⚑ PEP (${r.pep.length})</span>`,
+          r.ceis.length && `<span style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); border-radius:99px; padding:2px 10px; font-size:11px; font-weight:700;">⚠ CEIS (${r.ceis.length})</span>`,
+          r.cnep.length && `<span style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); border-radius:99px; padding:2px 10px; font-size:11px; font-weight:700;">⚠ CNEP (${r.cnep.length})</span>`
+        ].filter(Boolean).join(' ');
+
+        // PEP rows
+        const pepRows = r.pep.map(p => `
+          <tr>
+            <td><strong>${esc(p.nome || r.nome)}</strong></td>
+            <td>${esc(p.cargo || '—')}</td>
+            <td>${esc(p.ufExercicio || '—')}</td>
+            <td>${esc(p.dataInicioExercicio ? data(p.dataInicioExercicio) : '—')}</td>
+            <td>${p.dataFimExercicio ? esc(data(p.dataFimExercicio)) : '<span style="color:var(--green-accent);font-weight:700;">Ativo</span>'}</td>
+          </tr>`).join('');
+
+        const pepTable = r.pep.length ? `
+          <div style="font-size:11px; font-weight:700; color:var(--red-accent); text-transform:uppercase; letter-spacing:.05em; margin:14px 0 6px;">Pessoa Politicamente Exposta (PEP)</div>
+          <div class="table-container" style="margin-top:0;">
+            <table>
+              <thead><tr><th>Nome</th><th>Cargo</th><th>UF</th><th>Início</th><th>Fim / Situação</th></tr></thead>
+              <tbody>${pepRows}</tbody>
+            </table>
+          </div>` : '';
+
+        // CEIS/CNEP rows helper
+        const sancaoRows = (arr) => arr.map(s => `
+          <tr>
+            <td>${esc(s.tipoSancao?.descricaoResumida || s.tipoSancao?.descricao || '—')}</td>
+            <td>${esc(s.orgaoSancionador?.nome || s.orgaoSancionador?.descricao || '—')}</td>
+            <td>${esc(s.dataInicioSancao ? data(s.dataInicioSancao) : '—')}</td>
+            <td>${s.dataFimSancao ? esc(data(s.dataFimSancao)) : '<span style="color:var(--red-accent);font-weight:700;">Vigente</span>'}</td>
+            <td style="font-size:11px;">${esc(s.fundamentacaoLegal || '—')}</td>
+          </tr>`).join('');
+
+        const ceisTable = r.ceis.length ? `
+          <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:.05em; margin:14px 0 6px;">CEIS — Cadastro de Empresas Inidôneas e Suspensas</div>
+          <div class="table-container" style="margin-top:0;">
+            <table>
+              <thead><tr><th>Tipo de Sanção</th><th>Órgão Sancionador</th><th>Início</th><th>Fim / Situação</th><th>Fundamentação</th></tr></thead>
+              <tbody>${sancaoRows(r.ceis)}</tbody>
+            </table>
+          </div>` : '';
+
+        const cnepTable = r.cnep.length ? `
+          <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:.05em; margin:14px 0 6px;">CNEP — Cadastro Nacional de Empresas Punidas</div>
+          <div class="table-container" style="margin-top:0;">
+            <table>
+              <thead><tr><th>Tipo de Sanção</th><th>Órgão Sancionador</th><th>Início</th><th>Fim / Situação</th><th>Fundamentação</th></tr></thead>
+              <tbody>${sancaoRows(r.cnep)}</tbody>
+            </table>
+          </div>` : '';
+
+        const docFmt = r.tipo === 'cpf'
+          ? dig(r.doc).replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4')
+          : cnpj(r.doc);
+
+        return `
+          <div style="background:rgba(248,113,113,0.04); border:1px solid rgba(248,113,113,0.18); border-radius:var(--radius-sm); padding:16px; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+              <span style="font-weight:700; color:#fff; font-size:14px;">${esc(r.nome)}</span>
+              <span style="font-family:var(--font-mono); font-size:12px; color:var(--text-secondary);">${esc(docFmt)}</span>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">${tags}</div>
+            </div>
+            ${pepTable}${ceisTable}${cnepTable}
+          </div>`;
+      }).join('');
+
+      const resumoLimpo = semAlerta.length
+        ? `<div style="font-size:12px; color:var(--text-muted); margin-top:8px;">✓ Sem ocorrências: ${semAlerta.map(r => esc(r.nome)).join(', ')}</div>`
+        : '';
+
+      content.innerHTML = alertHtml + resumoLimpo;
+    }
+
     // --- DOMAIN AUDIT LOGIC (WHOIS / RDAP) ---
     function extrairDominioDeEmail(email) {
       if (!email || !email.includes('@')) return '';
@@ -20475,21 +20935,20 @@ const EXCHANGES_DATA = [
       domain = domain.trim().toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '');
       if (!domain.includes('.')) {
         $('waContent').innerHTML = `
-          <div style="background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.15); padding: 14px; border-radius: var(--radius-sm); color: var(--red-accent); font-size: 13px;">
-            Erro: Formato de domínio inválido. Insira um domínio válido (ex: <code>nome.com.br</code>).
-          </div>
-        `;
+          <div style="background: rgba(248,113,113,0.05); border: 1px solid rgba(248,113,113,0.15); padding: 14px; border-radius: var(--radius-sm); color: var(--red-accent); font-size: 13px;">
+            Formato inválido. Informe um domínio no padrão <code>exemplo.com.br</code>.
+          </div>`;
         return;
       }
 
       const isBrDomain = domain.endsWith('.br');
+      const tld = domain.split('.').slice(-1)[0];
 
       $('waContent').innerHTML = `
-        <div style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">
+        <div style="padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px;">
           <span style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">⏳</span>
-          Consultando registro de domínio e infraestrutura de hospedagem...
-        </div>
-      `;
+          Consultando registro de domínio e infraestrutura...
+        </div>`;
 
       try {
         const [rdapResult, ipResult] = await Promise.allSettled([
@@ -20498,130 +20957,122 @@ const EXCHANGES_DATA = [
         ]);
 
         const rdapData = rdapResult.status === 'fulfilled' ? rdapResult.value : null;
-        const ipInfo = ipResult.status === 'fulfilled' ? ipResult.value : null;
+        const ipInfo  = ipResult.status  === 'fulfilled' ? ipResult.value  : null;
 
         if (!rdapData && !ipInfo) {
-          throw new Error(rdapResult.reason?.message || 'Domínio não localizado ou serviço indisponível.');
+          throw new Error(rdapResult.reason?.message || 'Sem resposta das fontes consultadas.');
         }
 
         // --- Parse RDAP ---
-        let ownerName = 'Não informado';
-        let ownerDoc = 'Não informado';
+        let ownerName = '—';
+        let ownerDoc  = '—';
         let ownerDocType = '';
-        let creationDate = 'Não informada';
-        let expirationDate = 'Não informada';
-        let dnsStr = 'Não informado';
+        let creationDate   = '—';
+        let expirationDate = '—';
+        let dnsStr = '—';
 
         if (rdapData && !rdapData.error) {
-          const registrant = (rdapData.entities || []).find(e => e.roles && e.roles.includes('registrant'));
+          const registrant = (rdapData.entities || []).find(e => e.roles?.includes('registrant'));
           if (registrant) {
-            if (registrant.vcardArray && registrant.vcardArray[1]) {
-              const fnProp = registrant.vcardArray[1].find(p => p[0] === 'fn');
-              if (fnProp) ownerName = fnProp[3];
-            }
-            if (registrant.publicIds) {
-              const pubId = registrant.publicIds.find(p => p.type === 'cnpj' || p.type === 'cpf');
-              if (pubId) { ownerDoc = pubId.identifier; ownerDocType = pubId.type.toUpperCase(); }
-            }
+            const fn = registrant.vcardArray?.[1]?.find(p => p[0] === 'fn');
+            if (fn) ownerName = fn[3];
+            const pubId = registrant.publicIds?.find(p => p.type === 'cnpj' || p.type === 'cpf');
+            if (pubId) { ownerDoc = pubId.identifier; ownerDocType = pubId.type.toUpperCase(); }
           }
-          if (rdapData.events) {
-            const regEvent = rdapData.events.find(e => e.eventAction === 'registration');
-            if (regEvent) creationDate = new Date(regEvent.eventDate).toLocaleDateString('pt-BR');
-            const expEvent = rdapData.events.find(e => e.eventAction === 'expiration');
-            if (expEvent) expirationDate = new Date(expEvent.eventDate).toLocaleDateString('pt-BR');
-          }
-          if (rdapData.nameservers) {
-            const nsList = rdapData.nameservers.map(ns => ns.ldhName).filter(Boolean);
-            if (nsList.length) dnsStr = nsList.join(', ');
-          }
+          const regEvent = rdapData.events?.find(e => e.eventAction === 'registration');
+          if (regEvent) creationDate = new Date(regEvent.eventDate).toLocaleDateString('pt-BR');
+          const expEvent = rdapData.events?.find(e => e.eventAction === 'expiration');
+          if (expEvent) expirationDate = new Date(expEvent.eventDate).toLocaleDateString('pt-BR');
+          const nsList = (rdapData.nameservers || []).map(ns => ns.ldhName).filter(Boolean);
+          if (nsList.length) dnsStr = nsList.join(', ');
         }
 
-        // --- Ownership match badge ---
+        // --- Faixa de titularidade (apenas constatação) ---
         let matchHtml = '';
-        if (isBrDomain) {
-          const docOwnerClean = dig(ownerDoc);
-          const docInvestigatedClean = dig(cnpjInvestigado);
-          const matchResult = docOwnerClean && docInvestigatedClean
-            ? docOwnerClean.slice(0, 8) === docInvestigatedClean.slice(0, 8)
-            : false;
+        const infoStyle = 'margin-bottom:16px; display:block; border-color:rgba(255,255,255,0.1); background:rgba(255,255,255,0.02); padding:12px 14px; border-radius:var(--radius-sm); font-size:13px; color:var(--text-secondary); border:1px solid;';
 
-          if (ownerDoc === 'Não informado') {
-            matchHtml = `
-              <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); padding: 14px; border-radius: var(--radius-sm);">
-                <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: #f59e0b;">⚠️ INFORMAÇÃO OCULTA OU INDISPONÍVEL</div>
-                <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">Não foi possível extrair o CPF/CNPJ do titular. Pode ocorrer para domínios de pessoas físicas protegidos pela LGPD.</div>
-              </div>`;
-          } else if (matchResult) {
-            matchHtml = `
-              <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.08); padding: 14px; border-radius: var(--radius-sm);">
-                <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--green-accent);">✅ PROPRIEDADE CORRESPONDENTE</div>
-                <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">O domínio <strong>${esc(domain)}</strong> está registrado sob a mesma titularidade ou grupo econômico da empresa pesquisada (CNPJ base: <strong>${esc(ownerDoc)}</strong>).</div>
-              </div>`;
-          } else {
-            matchHtml = `
-              <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(248, 113, 113, 0.35); background: rgba(248, 113, 113, 0.08); padding: 14px; border-radius: var(--radius-sm);">
-                <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--red-accent);">🚨 RED FLAG: DIVERGÊNCIA DE PROPRIEDADE (POSSÍVEL LARANJA)</div>
-                <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">O domínio <strong>${esc(domain)}</strong> está registrado sob documento diferente (<strong>${esc(ownerDoc)}</strong> — ${esc(ownerName)}) do CNPJ investigado (<strong>${esc(cnpj(cnpjInvestigado))}</strong>).</div>
-              </div>`;
-          }
+        if (!isBrDomain) {
+          matchHtml = `<div style="${infoStyle}">
+            Fonte consultada: rdap.org · TLD: <strong>.${esc(tld)}</strong> · Documento do titular: não disponível neste formato de registro.
+          </div>`;
+        } else if (ownerDoc === '—') {
+          matchHtml = `<div style="${infoStyle}">
+            Fonte: Registro.br (RDAP) · Documento do titular: não consta no registro.
+          </div>`;
         } else {
-          matchHtml = `
-            <div class="warning-badge" style="margin-bottom: 20px; display: block; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); padding: 14px; border-radius: var(--radius-sm);">
-              <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: #f59e0b;">ℹ️ DOMÍNIO INTERNACIONAL — TITULARIDADE NÃO COMPARÁVEL</div>
-              <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);">Registros RDAP internacionais geralmente não expõem CPF/CNPJ. Verifique os dados do titular abaixo e a infraestrutura de hospedagem.</div>
-            </div>`;
+          const docOwnerClean      = dig(ownerDoc);
+          const docInvestigadoClean = dig(cnpjInvestigado);
+          const match = docOwnerClean && docInvestigadoClean
+            ? docOwnerClean.slice(0, 8) === docInvestigadoClean.slice(0, 8)
+            : null;
+
+          const borderColor = match === true
+            ? 'rgba(52,211,153,0.25)'
+            : match === false
+              ? 'rgba(248,113,113,0.25)'
+              : 'rgba(255,255,255,0.1)';
+
+          matchHtml = `<div style="${infoStyle} border-color:${borderColor};">
+            Fonte: Registro.br (RDAP) ·
+            Titular: <strong>${esc(ownerName)}</strong> ·
+            Documento: <strong>${esc(ownerDocType ? ownerDoc + ' (' + ownerDocType + ')' : ownerDoc)}</strong> ·
+            CNPJ consultado: <strong>${esc(cnpj(cnpjInvestigado))}</strong> ·
+            Correspondência pelo CNPJ raiz: <strong>${match === true ? 'Sim' : match === false ? 'Não' : 'Não verificável'}</strong>
+          </div>`;
         }
 
-        // --- RDAP fields block ---
-        const rdapSource = isBrDomain ? 'Registro.br (RDAP)' : 'rdap.org (RDAP Internacional)';
+        // --- Campos RDAP ---
+        const rdapSource = isBrDomain ? 'Registro.br (RDAP)' : `rdap.org — .${tld}`;
         const rdapFields = [
-          ['Domínio Auditado', domain, true],
-          ['Titular Registrado', ownerName, true],
+          ['Domínio',          domain,        true],
+          ['Titular',          ownerName,      true],
           ['Documento Titular', ownerDocType ? `${ownerDoc} (${ownerDocType})` : ownerDoc, false],
-          ['Data de Criação', creationDate, false],
-          ['Data de Expiração', expirationDate, false],
-          ['Servidores DNS', dnsStr, true]
+          ['Registro',         creationDate,   false],
+          ['Expiração',        expirationDate, false],
+          ['Servidores DNS',   dnsStr,         true]
         ];
         const rdapHtml = rdapData && !rdapData.error ? `
-          <div style="font-size: 12px; font-weight: 700; color: #c084fc; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em;">${esc(rdapSource)}</div>
-          <div class="fields-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div style="font-size:11px; font-weight:600; color:#c084fc; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">${esc(rdapSource)}</div>
+          <div class="fields-grid" style="grid-template-columns:repeat(4,1fr); margin-bottom:20px;">
             ${rdapFields.map(f => `
-              <div class="field-box ${f[2] ? 'wide' : ''}" style="background: rgba(168, 85, 247, 0.01); border-color: rgba(168, 85, 247, 0.08);">
-                <div class="field-label" style="color: #c084fc; font-weight:700;">${esc(f[0])}</div>
+              <div class="field-box ${f[2] ? 'wide' : ''}" style="border-color:rgba(168,85,247,0.1);">
+                <div class="field-label" style="color:rgba(192,132,252,0.7);">${esc(f[0])}</div>
                 <div class="field-value">${esc(f[1])}</div>
-              </div>`).join("")}
+              </div>`).join('')}
           </div>` : `
-          <div style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px; padding: 12px; border: 1px solid var(--card-border); border-radius: var(--radius-sm);">
-            ⚠️ Dados RDAP indisponíveis para este domínio.
+          <div style="color:var(--text-muted); font-size:13px; margin-bottom:20px; padding:12px; border:1px solid var(--card-border); border-radius:var(--radius-sm);">
+            Dados RDAP não obtidos para este domínio. ${rdapResult.reason ? '(' + esc(rdapResult.reason.message) + ')' : ''}
           </div>`;
 
-        // --- IP / Hosting block ---
+        // --- Infraestrutura IP ---
         let ipHtml = '';
         if (ipInfo) {
-          const isRisk = ipInfo.proxy || ipInfo.hosting;
-          const riskLabel = [ipInfo.proxy && 'VPN/Proxy', ipInfo.hosting && 'Datacenter/Hosting'].filter(Boolean).join(' e ');
+          const flags = [ipInfo.proxy && 'VPN/Proxy', ipInfo.hosting && 'Datacenter/Hosting'].filter(Boolean);
           const ipFields = [
-            ['País do Servidor', `${ipInfo.country || 'N/D'} (${ipInfo.countryCode || ''})`, false],
-            ['Cidade / Região', [ipInfo.city, ipInfo.regionName].filter(Boolean).join(', ') || 'N/D', false],
-            ['Provedor (ISP)', ipInfo.isp || 'N/D', true],
-            ['Organização / ASN', ipInfo.org || 'N/D', true],
-            ['VPN / Proxy detectado', ipInfo.proxy ? 'Sim ⚠️' : 'Não', false],
-            ['Datacenter / Hosting', ipInfo.hosting ? 'Sim ⚠️' : 'Não', false]
+            ['País',              `${ipInfo.country || '—'} (${ipInfo.countryCode || '—'})`, false],
+            ['Cidade / Região',   [ipInfo.city, ipInfo.regionName].filter(Boolean).join(', ') || '—', false],
+            ['Provedor (ISP)',    ipInfo.isp || '—', true],
+            ['Organização / ASN', ipInfo.org || '—', true],
+            ['VPN / Proxy',       ipInfo.proxy   ? 'Sim' : 'Não', false],
+            ['Datacenter',        ipInfo.hosting ? 'Sim' : 'Não', false]
           ];
           ipHtml = `
-            <div style="border-top: 1px dashed var(--card-border); padding-top: 20px; margin-top: 4px;">
-              <div style="font-size: 12px; font-weight: 700; color: var(--cyan-accent); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em;">Infraestrutura de Hospedagem (ip-api.com)</div>
-              ${isRisk ? `
-                <div style="background: rgba(248, 113, 113, 0.06); border: 1px solid rgba(248, 113, 113, 0.2); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: var(--red-accent);">
-                  🚨 <strong>Atenção:</strong> Servidor identificado como ${esc(riskLabel)} — pode indicar ocultação da infraestrutura real.
-                </div>` : ''}
-              <div class="fields-grid" style="grid-template-columns: repeat(4, 1fr);">
-                ${ipFields.map(f => `
-                  <div class="field-box ${f[2] ? 'wide' : ''}" style="background: rgba(34, 211, 238, 0.01); border-color: rgba(34, 211, 238, 0.08);">
-                    <div class="field-label" style="color: rgba(34, 211, 238, 0.7);">${esc(f[0])}</div>
-                    <div class="field-value">${esc(f[1])}</div>
-                  </div>`).join("")}
+            <div style="border-top:1px solid var(--card-border); padding-top:18px; margin-top:4px;">
+              <div style="font-size:11px; font-weight:600; color:var(--cyan-accent); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">
+                Infraestrutura (ip-api.com)${flags.length ? ' · Classificação: ' + flags.join(', ') : ''}
               </div>
+              <div class="fields-grid" style="grid-template-columns:repeat(4,1fr);">
+                ${ipFields.map(f => `
+                  <div class="field-box ${f[2] ? 'wide' : ''}" style="border-color:rgba(34,211,238,0.08);">
+                    <div class="field-label" style="color:rgba(34,211,238,0.6);">${esc(f[0])}</div>
+                    <div class="field-value">${esc(f[1])}</div>
+                  </div>`).join('')}
+              </div>
+            </div>`;
+        } else {
+          ipHtml = `
+            <div style="border-top:1px solid var(--card-border); padding-top:18px; margin-top:4px; color:var(--text-muted); font-size:13px;">
+              Dados de infraestrutura (ip-api.com) não obtidos.
             </div>`;
         }
 
@@ -20630,10 +21081,9 @@ const EXCHANGES_DATA = [
       } catch (error) {
         console.error("Erro ao auditar domínio:", error);
         $('waContent').innerHTML = `
-          <div style="background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.15); padding: 18px; border-radius: var(--radius-sm); color: var(--red-accent); font-size: 13px;">
-            <strong>Erro na Auditoria Web:</strong> ${esc(error.message || 'Não foi possível completar a consulta de domínio.')}
-          </div>
-        `;
+          <div style="background:rgba(248,113,113,0.05); border:1px solid rgba(248,113,113,0.15); padding:16px; border-radius:var(--radius-sm); color:var(--red-accent); font-size:13px;">
+            Consulta não concluída: ${esc(error.message || 'resposta não obtida.')}
+          </div>`;
       }
     }
 
@@ -20657,9 +21107,9 @@ const EXCHANGES_DATA = [
     });
     // --- INITIALIZATION & EVENTS ---
     window.onload = () => {
-      // Trigger Banco Central databases load immediately on start in background
       loadBcb();
       loadExchanges();
+      initPtKeyUi();
     };
 
     $('searchForm').onsubmit = realizarConsulta;
